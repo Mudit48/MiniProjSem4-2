@@ -35,7 +35,11 @@
         <!-- Right Section -->
         <div class="w-full md:w-1/2 p-6 md:p-12">
             <div class="max-w-md mx-auto">
-                <h1 class="text-white text-2xl font-semibold mb-5">Login</h1>
+                <h1 class="text-white text-2xl font-semibold mb-5">{% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                    {% endfor %}
+                    {% endif %}Login</h1>
 
                 <form class="space-y-4" action="{%url 'login'%}" method="POST">
                     {% csrf_token %}

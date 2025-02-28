@@ -38,14 +38,12 @@
                 <h1 class="text-white text-2xl md:text-4xl font-semibold mb-2">Create an account</h1>
                 <p class="text-gray-400 mb-8">
                     Already have an account?
-                    <a href="{% url 'login'%}" class="text-white hover:underline">Log in</a>
+                    <a href="{% url 'login'%}" class="text-white hover:underline">{{message}}Log in</a>
                 </p>
 
-                <form class="space-y-4" action="{%url 'login'%}" method="POST">
+                <form class="space-y-4" action="{%url 'register'%}" method="POST">
                     {% csrf_token%}
-                    <div class="flex flex-col md:flex-row gap-4">
-                        <input type="text" name="name"placeholder="username" class="w-full bg-[#1c1c24] text-white rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-purple-600">
-                    </div>
+                    
                     <input type="email" name="email"placeholder="Email" class="w-full bg-[#1c1c24] text-white rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-purple-600">
                     <div class="relative">
                         <input type="password" name="password"placeholder="password" class="w-full bg-[#1c1c24] text-white rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-purple-600">

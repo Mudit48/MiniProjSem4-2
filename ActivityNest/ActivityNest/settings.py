@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'tailwind',
     'django_browser_reload',
     'users',
+    'main',
 ]
 
 MIDDLEWARE = [
@@ -57,7 +58,7 @@ ROOT_URLCONF = 'ActivityNest.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['ActivityNest/templates', 'users/templates/users'],
+        'DIRS': ['ActivityNest/templates', 'users/templates/users', 'main/templates/main'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

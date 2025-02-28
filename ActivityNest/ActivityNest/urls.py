@@ -4,11 +4,11 @@ from django.shortcuts import redirect
 from . import views
 
 def redirect_to_login(request):
-    return redirect("login")  # Redirects unauthenticated users to login page
+    return redirect("login")  
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.home, name="home"),  # Home page (will enforce login in views)
-    path('auth/', include("users.urls")),  # Authentication URLs
+    path('', include("main.urls")),  
+    path('auth/', include("users.urls")),  
     path("__reload__/", include("django_browser_reload.urls")),
 ]
