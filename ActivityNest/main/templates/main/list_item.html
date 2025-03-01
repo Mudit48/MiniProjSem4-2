@@ -7,15 +7,14 @@
 </head>
 <body>
 
-    <form action="{%url 'list_item'%}" method="post">
-        {% csrf_token%}
-        
-        {{form.as_p}}
-
-        <button type="submit"> submit item </button>
-
-
+    <form action="{% url 'list_item' %}" method="post">
+        {% csrf_token %}
+    
+        {{ form.as_p }}
+    
+        <button type="submit">Submit Item</button>
     </form>
+    
 
     
 </body>
