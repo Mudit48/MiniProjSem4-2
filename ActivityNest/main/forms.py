@@ -7,9 +7,10 @@ class ListForm(forms.ModelForm):
 
     class Meta:
         model = Item
-        fields = ("name", "category", "description", "department")
+        fields = ("name", "category", "description", "department", "year")
         widgets = {
             'category' : forms.Select,
+            'year' : forms.Select,
         }
 
     def __init__(self, *args, **kwargs):

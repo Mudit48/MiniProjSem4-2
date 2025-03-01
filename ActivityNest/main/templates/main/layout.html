@@ -10,46 +10,94 @@
   </script>
 
   <script defer>
+    document.addEventListener('DOMContentLoaded', function () {
+      const departmentsButton = document.getElementById('departments-button');
+      const departmentsDropdown = document.getElementById('departments-dropdown');
     
-    document.addEventListener('DOMContentLoaded', function() {
-        const departmentsButton = document.getElementById('departments-button');
-        const departmentsDropdown = document.getElementById('departments-dropdown');
+      function showDropdown() {
+        departmentsDropdown.classList.remove('hidden');
+        departmentsDropdown.classList.add('transition', 'ease-out', 'duration-100', 'transform', 'opacity-0', 'scale-95');
+        void departmentsDropdown.offsetWidth; 
+        departmentsDropdown.classList.replace('opacity-0', 'opacity-100');
+        departmentsDropdown.classList.replace('scale-95', 'scale-100');
+      }
     
-        departmentsButton.addEventListener('click', function() {
-          if (departmentsDropdown.classList.contains('hidden')) {
-            departmentsDropdown.classList.remove('hidden');
-          } else {
-            departmentsDropdown.classList.add('hidden');
-          }
-        });
-    });
-
-    document.addEventListener('DOMContentLoaded', function() {
-      const user_button = document.getElementById('user-menu-button');
-      const user_dropdown = document.getElementById('user_profile');
-  
-      user_button.addEventListener('click', function() {
-        if (user_dropdown.classList.contains('hidden')) {
-          user_dropdown.classList.remove('hidden');
+      function hideDropdown() {
+        departmentsDropdown.classList.add('transition', 'ease-in', 'duration-75', 'transform', 'opacity-100', 'scale-100');
+        departmentsDropdown.classList.replace('opacity-100', 'opacity-0');
+        departmentsDropdown.classList.replace('scale-100', 'scale-95');
+        setTimeout(() => {
+          departmentsDropdown.classList.add('hidden');
+        }, 75); 
+      }
+    
+      departmentsButton.addEventListener('click', function () {
+        if (departmentsDropdown.classList.contains('hidden')) {
+          showDropdown();
         } else {
-          user_dropdown.classList.add('hidden');
+          hideDropdown();
         }
       });
-  });
+    
+      document.addEventListener('click', function (event) {
+        const isClickInside = departmentsButton.contains(event.target) || departmentsDropdown.contains(event.target);
+        if (!isClickInside && !departmentsDropdown.classList.contains('hidden')) {
+          hideDropdown();
+        }
+      });
+    
+      departmentsDropdown.addEventListener('focusout', function (event) {
+        if (!departmentsDropdown.contains(event.relatedTarget)) {
+          hideDropdown();
+        }
+      });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const userButton = document.getElementById('user-menu-button');
+      const userDropdown = document.getElementById('user_profile');
+    
+      function showDropdown() {
+        userDropdown.classList.remove('hidden');
+        userDropdown.classList.add('transition', 'ease-out', 'duration-100', 'transform', 'opacity-0', 'scale-95');
+        void userDropdown.offsetWidth; 
+        userDropdown.classList.replace('opacity-0', 'opacity-100');
+        userDropdown.classList.replace('scale-95', 'scale-100');
+      }
+    
+      function hideDropdown() {
+        userDropdown.classList.add('transition', 'ease-in', 'duration-75', 'transform', 'opacity-100', 'scale-100');
+        userDropdown.classList.replace('opacity-100', 'opacity-0');
+        userDropdown.classList.replace('scale-100', 'scale-95');
+        setTimeout(() => {
+          userDropdown.classList.add('hidden');
+        }, 75); 
+      }
+    
+      userButton.addEventListener('click', function () {
+        if (userDropdown.classList.contains('hidden')) {
+          showDropdown();
+        } else {
+          hideDropdown();
+        }
+      });
+    
+      document.addEventListener('click', function (event) {
+        const isClickInside = userButton.contains(event.target) || userDropdown.contains(event.target);
+        if (!isClickInside && !userDropdown.classList.contains('hidden')) {
+          hideDropdown();
+        }
+      });
+    
+      userDropdown.addEventListener('focusout', function (event) {
+        if (!userDropdown.contains(event.relatedTarget)) {
+          hideDropdown();
+        }
+      });
+    });
 
     
-    document.addEventListener('DOMContentLoaded', function() {
-        const classDropdown = document.querySelector('.dropdown-content');
-        const classButton = document.querySelector('.class-button');
-        
-        classButton.addEventListener('click', function() {
-          if (classDropdown.classList.contains('hidden')) {
-            classDropdown.classList.remove('hidden');
-          } else {
-            classDropdown.classList.add('hidden');
-          }
-        });
-    });
+
   </script>
 
   <title>
@@ -176,14 +224,7 @@
                 </div>
 
                 <!--
-                  Dropdown menu, show/hide based on menu state.
-
-                  Entering: "transition ease-out duration-100"
-                    From: "transform opacity-0 scale-95"
-                    To: "transform opacity-100 scale-100"
-                  Leaving: "transition ease-in duration-75"
-                    From: "transform opacity-100 scale-100"
-                    To: "transform opacity-0 scale-95"
+                  
                 -->
                 <div class="hidden absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 ring-1 shadow-lg ring-black/5 " id="user_profile" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
                   <!-- Active: "bg-gray-100 outline-hidden", Not Active: "" -->
@@ -197,11 +238,11 @@
     </nav>
 
     <header class="bg-white shadow-sm ">
-        <div class="mx-auto max-w-8xl py-6 sm:px-6 flex items-center ">
+        <div class="mx-auto max-w-8xl py-6 sm:px-6 flex ">
 
             <img src="https://www.xavier.ac.in/images/logo.png" alt="failed to load" class="h-12">
     
-          <h1 class="font-bold text-2xl absolute inset-x-0 text-center">
+          <h1 class="font-bold text-2xl inset-x-0 text-center mx-auto">
             {%block bar_title%}
             default
              {%endblock%}
@@ -212,7 +253,6 @@
       
       
     <main>
-        
         
         {% block data%}
 

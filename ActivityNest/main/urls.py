@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from django.contrib.auth.views import LoginView, LogoutView
 from . import views
 
@@ -7,4 +7,6 @@ urlpatterns = [
     path('department/<str:dept>/', views.department, name="dept"),
     path('list', views.list_item, name='list_item'),
     path("pie-chart/", views.pie_chart, name="pie_chart"),
+    path("__reload__/", include("django_browser_reload.urls")),
+
 ]

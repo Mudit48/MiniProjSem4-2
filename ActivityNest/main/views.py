@@ -26,13 +26,16 @@ def home(req):
 dep = ['it', 'cse', 'cs', 'extc']
 
 def department(req, dept):
-
-    if dept in dep:
-        dept_items = Item.objects.filter(department=dept)
-        return render(req, 'department.html' , { "dept" : dept, 'dept_items' :dept_items})
-    else:
+    try:
+        if dept in dep:
+            dept_items = Item.objects.filter(department=dept)
+            return render(req, 'department.html' , { "dept" : dept, 'dept_items' :dept_items})
+        else:
+            return render(req, '404.html')
+    except:
         return render(req, '404.html')
 
+@login_required
 def list_item(req):
     form = ListForm()
     department = req.user.member.department

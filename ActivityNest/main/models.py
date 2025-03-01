@@ -7,7 +7,12 @@ category_items = {
     'achievement' : "achievement",
     'placement' : "placement",
     'certificate' : "certificate",
+}
 
+year_choice = {
+    "SE" : "SE",
+    "TE" : "TE",
+    "BE" : "BE",
 }
 
 class Item(models.Model):
@@ -16,6 +21,7 @@ class Item(models.Model):
     description = models.CharField(max_length=200)
     date_posted = models.DateTimeField(auto_now_add=True)
     department = models.CharField(max_length=4)
+    year = models.CharField(max_length=2, null=True, choices=year_choice)
     #image = models.ImageField()
 
     def __str__(self):
