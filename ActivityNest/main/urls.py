@@ -7,6 +7,7 @@ urlpatterns = [
     path('department/<str:dept>/', views.department, name="dept"),
     path('list', views.list_item, name='list_item'),
     path("pie-chart/", views.pie_chart, name="pie_chart"),
+    path("pie-chart-year/<str:dept>/", views.pie_chart_year, name="pie_chart_year_dept"),
     path("__reload__/", include("django_browser_reload.urls")),
 
 ]

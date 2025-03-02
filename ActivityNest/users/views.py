@@ -47,7 +47,7 @@ def login_user(req):
         else:
             return render(req, 'login.html', {'form': form, 'message': 'Invalid email or password'})
     else:
-        return render(req, 'login.html', {'form': form, 'message': 'Invalid email or password'})
+        return render(req, 'login.html')
 
 def logout_user(req):
     logout(req)

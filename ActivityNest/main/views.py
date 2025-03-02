@@ -7,10 +7,19 @@ from django.shortcuts import render, redirect
 from users.models import Member 
 from django.shortcuts import render
 from django.http import HttpResponse
-from .charts import generate_pie_chart  # ✅ Import the function
-
+from .charts import generate_pie_chart
+from .chartyear import generate_pie_chart_year
 def pie_chart(request):
     buffer = generate_pie_chart()
+    
+    # If buffer is None, return a message instead of an image
+    if buffer is None:
+        return HttpResponse("No data available to generate the chart.", content_type="text/plain")
+
+    return HttpResponse(buffer.getvalue(), content_type="image/png")
+
+def pie_chart_year(request, dept):
+    buffer = generate_pie_chart_year(dept)
     
     # If buffer is None, return a message instead of an image
     if buffer is None:
@@ -26,14 +35,12 @@ def home(req):
 dep = ['it', 'cse', 'cs', 'extc']
 
 def department(req, dept):
-    try:
-        if dept in dep:
-            dept_items = Item.objects.filter(department=dept)
-            return render(req, 'department.html' , { "dept" : dept, 'dept_items' :dept_items})
-        else:
-            return render(req, '404.html')
-    except:
+    if dept in dep:
+        dept_items = Item.objects.filter(department=dept)
+        return render(req, 'department.html' , { "dept" : dept, 'dept_items' :dept_items, 'chart_year_url': '/pie-chart-year/'} )
+    else:
         return render(req, '404.html')
+    
 
 @login_required
 def list_item(req):
