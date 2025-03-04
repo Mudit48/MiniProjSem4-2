@@ -1,12 +1,9 @@
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .forms import ListForm, UpdateListForm
 from .models import Item
-from django.shortcuts import render, redirect, get_object_or_404
 from users.models import Member 
-from django.shortcuts import render
-from django.http import HttpResponse
 from .charts import generate_pie_chart
 from .chartyear import generate_pie_chart_year
 
@@ -32,7 +29,7 @@ def home(req):
     all_items = Item.objects.all()
     form = UpdateListForm()
     username = req.user.username
-    return render(req, 'index.html', {'all_items': all_items ,'chart_url': '/pie-chart/', 'curr_username' : username, 'form' : form} )
+    return render(req, 'index.html', {'all_items': all_items ,'chart_url': '/pie-chart/', 'curr_username' : username,  'form' : form} )
 
 def updt(request, item_id):
     item = get_object_or_404(Item, id=item_id)  # Fetch the existing item

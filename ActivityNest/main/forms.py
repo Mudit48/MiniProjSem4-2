@@ -32,6 +32,10 @@ class UpdateListForm(forms.ModelForm):
 
     class Meta:
         model = Item
-        fields = ["name", "description"]
+        fields = ["description"]
  
-
+    def __init__(self, *args, **kwargs):
+        item = kwargs.pop('item', None) 
+        super().__init__(*args, **kwargs)
+        if item:
+            self.fields['sUsername'].initial = item.sUsername
