@@ -6,6 +6,7 @@ from .models import Item
 from users.models import Member 
 from .charts import generate_pie_chart
 from .chartyear import generate_pie_chart_year
+import cloudinary.uploader
 
 def pie_chart(request):
     buffer = generate_pie_chart()
@@ -65,11 +66,22 @@ def list_item(req):
     form = ListForm()
     department = req.user.member.department
     if req.method == 'POST':
-        form = ListForm(req.POST, user=req.user)
+        form = ListForm(req.POST, req.FILES, user=req.user)
         if form.is_valid():
+
             item = form.save(commit=False)
+            files = req.FILES.getlist("files")  # Get multiple files from form
+            print(len(files))
+            uploaded_urls = []  # Store uploaded file URLs
+
+            for file in files:
+                upload_result = cloudinary.uploader.upload(file,resource_type="auto")  # Upload to Cloudinary
+                uploaded_urls.append(upload_result["secure_url"])  # Store URL
+
+            item.files=uploaded_urls
             item.department = department
-            form.save()
+            item.save()
+            print("Item saved.")
             return redirect('home')
         else:
             return HttpResponse("Invalid form")

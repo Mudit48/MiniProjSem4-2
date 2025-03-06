@@ -10,6 +10,7 @@ class ListForm(forms.ModelForm):
     category = forms.ChoiceField(choices=category_items, widget=forms.Select(attrs={'class' : 'text-black'}))
     year = forms.ChoiceField(choices=year_choice, widget=forms.Select(attrs={'class' : 'text-black'}))
     description = forms.CharField(widget=forms.TextInput(attrs={'class' : 'text-black ring-black ring-1 rounded-lg h-5'}))
+    # files = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}))
 
 
 
