@@ -4,6 +4,7 @@ from .models import category_items, year_choice
 
 
 class ListForm(forms.ModelForm):
+    sUsername = forms.CharField(widget=forms.TextInput(attrs={ 'class' : 'text-black ring-black ring-1 rounded-lg h-5'}))
     name = forms.CharField(widget=forms.TextInput(attrs={ 'class' : 'text-black ring-black ring-1 rounded-lg h-5'}))
     department = forms.CharField(widget=forms.TextInput(attrs={'readonly' : 'readonly', 'class' : 'text-black '}))
     category = forms.ChoiceField(choices=category_items, widget=forms.Select(attrs={'class' : 'text-black'}))
@@ -14,7 +15,7 @@ class ListForm(forms.ModelForm):
 
     class Meta:
         model = Item
-        fields = ("name", "category", "description", "department", "year")
+        fields = ("sUsername", "name", "category", "description", "department", "year")
         widgets = {
             'category' : forms.Select,
             'year' : forms.Select,
@@ -25,3 +26,16 @@ class ListForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         if user:
             self.fields['department'].initial = user.member.department
+
+class UpdateListForm(forms.ModelForm):
+    description = forms.CharField(widget=forms.TextInput(attrs={'class' : 'text-black ring-black ring-1 rounded-lg h-5'}))
+
+    class Meta:
+        model = Item
+        fields = ["description"]
+ 
+    def __init__(self, *args, **kwargs):
+        item = kwargs.pop('item', None) 
+        super().__init__(*args, **kwargs)
+        if item:
+            self.fields['sUsername'].initial = item.sUsername

@@ -1,14 +1,12 @@
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .forms import ListForm
+from .forms import ListForm, UpdateListForm
 from .models import Item
-from django.shortcuts import render, redirect
 from users.models import Member 
-from django.shortcuts import render
-from django.http import HttpResponse
 from .charts import generate_pie_chart
 from .chartyear import generate_pie_chart_year
+
 def pie_chart(request):
     buffer = generate_pie_chart()
     
@@ -21,7 +19,6 @@ def pie_chart(request):
 def pie_chart_year(request, dept):
     buffer = generate_pie_chart_year(dept)
     
-    # If buffer is None, return a message instead of an image
     if buffer is None:
         return HttpResponse("No data available to generate the chart.", content_type="text/plain")
 
@@ -30,7 +27,28 @@ def pie_chart_year(request, dept):
 
 def home(req):
     all_items = Item.objects.all()
-    return render(req, 'index.html', {'all_items': all_items ,'chart_url': '/pie-chart/'} )
+    form = UpdateListForm()
+    username = req.user.username
+    return render(req, 'index.html', {'all_items': all_items ,'chart_url': '/pie-chart/', 'curr_username' : username,  'form' : form} )
+
+def updt(request, item_id):
+    item = get_object_or_404(Item, id=item_id)  # Fetch the existing item
+
+    if request.method == "POST":
+        form = UpdateListForm(request.POST, instance=item)  # Ensure using UpdateListForm
+        if form.is_valid():
+            print(form)
+            form.save()  # Update only the description
+            return redirect('home')  # Redirect to the homepage
+        else:
+            print(form.errors)
+    
+    else:
+        form = UpdateListForm(instance=item)  # Load existing data
+
+    return redirect('home')
+
+
 
 dep = ['it', 'cse', 'cs', 'extc']
 

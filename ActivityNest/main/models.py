@@ -16,6 +16,7 @@ year_choice = {
 }
 
 class Item(models.Model):
+    sUsername = models.CharField(max_length=100, null=True)
     name = models.CharField(max_length=100)
     category = models.CharField(max_length=100, blank=False, choices=category_items)
     description = models.CharField(max_length=200)

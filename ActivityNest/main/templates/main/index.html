@@ -16,6 +16,38 @@
             <h1 class=""> Contribution by Departments </h1>
         </div>
     </div>
+    <dialog id="modal1" class=" fixed top-1/2 left-1/2 w-100 h-100 -translate-x-1/2 -translate-y-1/2 bg-black/50">
+        <div class="flex items-center justify-center bg-white p-6 h-full w-full rounded-lg shadow-lg w-96">
+            <form id="form-id" method="POST">
+                <div class="">
+                {% csrf_token %}
+                    <div class="">
+                        <label id="label-username" class="" > Username : </label> <input readonly id="input-username">
+                        <p id="item-username" class="">  </p>
+                            {{form.as_p}}
+                        <label id="label-year" class="" > Year : </label> <input readonly id="input-year">
+                        <br>
+                        <label id="label-category" class="" > Category : </label> <input readonly id="input-category">
+                        <br>
+                        <label id="label-dept" class="" > Department : </label> <input readonly id="input-dept">
+                        
+                        <div>
+                        <button type="submit" class="bg-black text-white p-2 mt-2 rounded-lg"> Submit </button>
+                        </div>
+                    </div>
+
+                    <div class="text-right">
+                        <button onclick="document.getElementById('modal1').close() " class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                            Close
+                        </button>
+                    </div>
+
+                </div>
+            </form>
+            
+        </div>
+    </dialog>
+
     <dialog id="modal" class=" fixed top-1/2 left-1/2 w-150 h-150 -translate-x-1/2 -translate-y-1/2 bg-black/50">
         <div class="bg-white p-6 h-full w-full rounded-lg shadow-lg w-96">
             <div>
@@ -68,8 +100,16 @@
                     <div class="mt-3 text-xs flex justify-between">
                         <div> {{item.date_posted}}</div>
                             <div class="text-white text-right">
-                                <button data-item-id="{{ item.id }}" data-item-year="{{item.year}}" data-item-name="{{ item.name }}" data-item-description="{{ item.description }}" data-item-category="{{item.category}}" data-item-department="{{ item.department }}"
-                                    class="show-data modal-button bg-black hover:cursor-pointer text-xs text-white rounded-lg p-2 transition-colors">
+                                {% if item.sUsername == curr_username%}
+                                <button data-item-username="{{ item.sUsername }}" data-item-id="{{ item.id }}" data-item-year="{{item.year}}" data-item-name="{{ item.name }}" 
+                                    data-item-description="{{ item.description }}" data-item-category="{{item.category}}" data-item-department="{{ item.department }}"
+                                    class="update-modal-button bg-black hover:cursor-pointer text-xs text-white rounded-lg p-2 transition-colors">
+                                    Update
+                                </button>
+                                {% endif %}
+                                <button data-item-id="{{ item.id }}" data-item-year="{{item.year}}" data-item-name="{{ item.name }}" 
+                                    data-item-description="{{ item.description }}" data-item-category="{{item.category}}" data-item-department="{{ item.department }}"
+                                    class="show-more-modal-button bg-black hover:cursor-pointer text-xs text-white rounded-lg p-2 transition-colors">
                                     Show More
                                 </button>
                             </div>
@@ -82,31 +122,37 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const buttons = document.querySelectorAll('.show-data');
+        const showMoreButtons = document.querySelectorAll('.show-more-modal-button');
 
-        buttons.forEach(button => {
+        showMoreButtons.forEach(button => {
             button.addEventListener('click', () => {
-                const itemName = button.dataset.itemName;
-                const itemDescription = button.dataset.itemDescription;
-                const itemCategory = button.dataset.itemCategory;
-                const itemDepartment = button.dataset.itemDepartment;
-                const itemYear = button.dataset.itemYear
-
-
-                document.getElementById('modal-title').textContent = itemName+' ';
-                document.getElementById('modal-description').textContent = itemDescription;
-                document.getElementById('modal-category').textContent = itemCategory;
-                document.getElementById('modal-department').textContent = itemDepartment;
-                document.getElementById('modal-year').textContent = '('+itemYear+'-';
-                document.getElementById('modal-dept').textContent = itemDepartment+')';
-
-
+                document.getElementById('modal-title').textContent = button.dataset.itemName;
+                document.getElementById('modal-description').textContent = button.dataset.itemDescription;
+                document.getElementById('modal-category').textContent = button.dataset.itemCategory;
+                document.getElementById('modal-department').textContent = button.dataset.itemDepartment;
+                document.getElementById('modal-year').textContent = `(${button.dataset.itemYear}-`;
+                document.getElementById('modal-dept').textContent = `${button.dataset.itemDepartment})`;
 
                 document.getElementById('modal').showModal(); 
             });
         });
+
+        const updateButtons = document.querySelectorAll('.update-modal-button');
+
+        updateButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                document.getElementById('input-username').value = button.dataset.itemUsername;
+                document.getElementById('modal-description').textContent = button.dataset.itemDescription;
+                document.getElementById('input-category').value = button.dataset.itemCategory;
+                document.getElementById('input-year').value = button.dataset.itemYear;
+                document.getElementById('input-dept').value = button.dataset.itemDepartment;
+                document.getElementById('form-id').action = `/update/${button.dataset.itemId}/`;
+                document.getElementById('modal1').showModal();
+            });
+        });
     });
 </script>
+
 
 
 {% endblock %}
