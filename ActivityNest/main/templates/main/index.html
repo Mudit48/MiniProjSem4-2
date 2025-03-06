@@ -51,7 +51,12 @@
     <dialog id="modal" class=" fixed top-1/2 left-1/2 w-150 h-150 -translate-x-1/2 -translate-y-1/2 bg-black/50">
         <div class="bg-white p-6 h-full w-full rounded-lg shadow-lg w-96">
             <div>
-                <img src="https://cdn.britannica.com/55/174255-050-526314B6/brown-Guernsey-cow.jpg" class="object-cover">
+                {% for item in all_items %}
+                    {% for file in item.files %}
+                        <img src="{{ file }}" alt="Item Image" class="w-40 h-40 object-cover">
+                    {% endfor %}
+                {% endfor %}
+
             </div>
             <div class="flex w-full text-center justify-center">
                 <h1 id="modal-title" class="text-xl"> </h1>
