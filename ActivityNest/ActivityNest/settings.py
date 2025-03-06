@@ -81,14 +81,15 @@ WSGI_APPLICATION = 'ActivityNest.wsgi.application'
 
 DATABASES = {
     'default': {
-        "ENGINE": "django.db.backends.mysql",
-        "NAME": "activitynest",
-        "USER": "mudit",
-        "PASSWORD": "mudit",
-        "HOST": "127.0.0.1",
-        "PORT": "3306",
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres.kbxnsnbtefjileysccyf',
+        'PASSWORD': 'ActivityNest@123',
+        'HOST': 'aws-0-ap-south-1.pooler.supabase.com',  # e.g., db.xxxxx.supabase.co
+        'PORT': '6543',
     }
 }
+
 
 
 # Password validation
