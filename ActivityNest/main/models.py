@@ -26,5 +26,5 @@ class Item(models.Model):
     files=models.JSONField(default=list)
 
     def __str__(self):
-        return self.name + ' ' + self.date_posted
+        return self.name
 
