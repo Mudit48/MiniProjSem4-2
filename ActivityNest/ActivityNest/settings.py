@@ -93,17 +93,6 @@ WSGI_APPLICATION = 'ActivityNest.wsgi.application'
 #     }
 # }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'postgres',
-#         'USER': 'postgres.sxkbncxnodxkpxeaosfi',
-#         'PASSWORD': 'Rishabh@1234',
-#         'HOST': 'aws-0-ap-south-1.pooler.supabase.com',
-#         'PORT': '5432'  # Supabase uses PostgreSQL on port 5432
-#     }
-# }
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
