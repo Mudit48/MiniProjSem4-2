@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>list</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+
+            
+            font-family: 'Raleway', sans-serif;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.8s ease-out;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-cyan-100 to-blue-50 min-h-screen flex items-center justify-center p-6">
+
+    <div class="w-full max-w-[1000px] bg-white text-gray-900 p-12 rounded-3xl shadow-2xl fade-in">
+        
+        <!-- Heading -->
+        <h2 class="text-4xl font-bold text-center text-gray-800 mb-6">Event Information</h2>
+        <p class="text-lg text-gray-600 text-center mb-8">
+            Please fill in the details below to submit event details.
+        </p>
+
+        <!-- Form -->
+        <form action="{% url 'list_item' %}" method="post" class="space-y-6">
+            {% csrf_token %}
+
+            <!-- Event Name -->
+            <div>
+                <label class="block text-lg font-medium text-gray-700">Event Name</label>
+                <input type="text" name="name" class="w-full mt-2 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:outline-none text-lg">
+            </div>
+
+            <!-- Category Selection (Updated Dropdown) -->
+            <div>
+                <label class="block text-lg font-medium text-gray-700">Category</label>
+                <select name="category" class="w-full mt-2 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:outline-none text-lg">
+                    <option value="Workshops">Workshops</option>
+                    <option value="Internships">Internships</option>
+                    <option value="Placements">Placements</option>
+                    <option value="Certificates">Certificates</option>
+                    <option value="Mini Project">Mini Project</option>
+                    <option value="Activities">Activities</option>
+                </select>
+            </div>
+
+            <!-- Event Description (Large Text Area) -->
+            <div>
+                <label class="block text-lg font-medium text-gray-700">Event Description</label>
+                <textarea name="description" rows="5" class="w-full mt-2 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:outline-none text-lg resize-none"></textarea>
+            </div>
+
+            <!-- Department & Year (Updated Dropdowns) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-lg font-medium text-gray-700">Department</label>
+                    <select name="department" class="w-full mt-2 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:outline-none text-lg">
+                        <option value="IT">IT</option>
+                        <option value="CS">CS</option>
+                        <option value="CSE">CSE</option>
+                        <option value="EXTC">EXTC</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-lg font-medium text-gray-700">Year</label>
+                    <select name="year" class="w-full mt-2 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:outline-none text-lg">
+                        <option value="First Year">First Year</option>
+                        <option value="Second Year">Second Year</option>
+                        <option value="Third Year">Third Year</option>
+                        <option value="Final Year">Final Year</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-4 rounded-lg transition-transform duration-300 hover:scale-105">
+                Submit Event Details
+            </button>
+        </form>
+    </div>
+
+</body>
+</html>

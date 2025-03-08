@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        input, select {
+            font-family: 'Poppins', sans-serif;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.8s ease-out;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-cyan-100 to-blue-50 flex items-center justify-center min-h-screen">
+
+    <!-- Container -->
+    <div class="relative flex flex-col md:flex-row w-full max-w-4xl bg-white shadow-2xl rounded-3xl overflow-hidden fade-in">
+        
+        <!-- Left Side (Image & Branding) -->
+        <div class="hidden md:flex md:w-1/2 bg-gradient-to-br from-cyan-400 to-blue-500 text-white p-10 flex-col justify-center items-center relative">
+            <img src="image.png" alt="Logo" class="w-24 h-24 mb-4">
+            <h2 class="text-3xl font-semibold">Join Us Today</h2>
+            <p class="text-lg mt-2">Create your account in seconds</p>
+        </div>
+
+        <!-- Right Side (Form) -->
+        <div class="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
+
+            <!-- Heading -->
+            <h2 class="text-2xl font-semibold text-gray-800 text-center">Create an Account</h2>
+
+            <!-- Alerts -->
+            {% if messages %}
+            <div class="absolute top-6 right-6 space-y-3">
+                {% for message in messages %}
+                <div class="p-4 border-l-4 {% if message.tags == 'success' %}border-green-500 bg-green-100{% elif message.tags == 'error' %}border-red-500 bg-red-100{% endif %} text-gray-700 rounded-lg shadow fade-in">
+                    <span class="font-semibold">{{ message }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- Form -->
+            <form action="{% url 'register' %}" method="POST" class="space-y-5">
+                {% csrf_token %}
+                
+                <!-- Form Fields -->
+                <div class="text-gray-700 space-y-4">
+                    {{ form.as_p }}
+                </div>
+
+                <!-- Input Fields Styling -->
+                <style>
+                    input, select {
+                        background: white !important;
+                        color: black !important;
+                        border: 1px solid #ccc;
+                        padding: 10px;
+                        border-radius: 8px;
+                        width: 100%;
+                        outline: none;
+                        transition: all 0.3s;
+                    }
+                    input:focus, select:focus {
+                        border-color: #0ea5e9;
+                        box-shadow: 0 0 10px rgba(14, 165, 233, 0.2);
+                    }
+                </style>
+
+                <!-- Submit Button -->
+                <button type="submit"
+                    class="w-full bg-cyan-600 text-white font-semibold rounded-lg p-3 hover:bg-cyan-700 transition-all duration-300">
+                    Create account
+                </button>
+
+                <!-- Login Link -->
+                <p class="text-gray-600 text-center mt-4">
+                    Already have an account? <a href="{% url 'login' %}" class="text-cyan-600 font-semibold hover:underline">Log in</a>
+                </p>
+
+            </form>
+        </div>
+    </div>
+</body>
+</html>
