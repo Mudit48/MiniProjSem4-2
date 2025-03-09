@@ -61,6 +61,10 @@ def department(req, dept):
     else:
         return render(req, '404.html')
     
+def profile(req, username):
+    user = Item.objects.filter(sUsername__iexact=username)
+    return render(req, 'profile.html', {'user_items': user})
+    
 
 @login_required
 def list_item(req):
