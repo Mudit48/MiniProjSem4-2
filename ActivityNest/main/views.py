@@ -6,6 +6,7 @@ from .models import Item
 from users.models import Member 
 from .charts import generate_pie_chart
 from .chartyear import generate_pie_chart_year
+import cloudinary.uploader
 
 def pie_chart(request):
     buffer = generate_pie_chart()
