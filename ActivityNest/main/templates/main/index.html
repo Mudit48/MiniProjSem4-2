@@ -1,0 +1,177 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block bar_title%}
+    Welcome to Activity Nest!
+{% endblock %}
+
+{% block Auth %}
+<div class="hidden absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 ring-1 shadow-lg ring-black/5 " id="user_profile" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
+{% if not user.is_authenticated %}
+  <a href="{%url 'register'%}" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">Register</a>
+  <a href="{%url 'login'%}" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">Login</a>
+  {% endif %}
+  {% if user.is_authenticated %}
+  <a href="{%url 'logout'%}" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">Sign out</a>
+  {% endif %}
+</div>
+{% endblock Auth %}
+{% if member%}
+{% block name %}{{ user.username | capfirst}} - {{member.roles}}{% endblock name %}
+{% endif %}
+{% block data %}
+<div class="flex">
+    <div class="h-120 mt-2 text-center pl-3 shadow-lg">
+        <img src="{{chart_url}}" class="object-cover " alt="Department Pie Chart" >
+        <div>
+            <h1 class=""> Contribution by Departments </h1>
+        </div>
+    </div>
+    <dialog id="modal1" class=" fixed top-1/2 left-1/2 w-100 h-100 -translate-x-1/2 -translate-y-1/2 bg-black/50">
+        <div class="flex items-center justify-center bg-white p-6 h-full w-full rounded-lg shadow-lg w-96">
+            <form id="form-id" method="POST">
+                <div class="">
+                {% csrf_token %}
+                    <div class="">
+                        <label id="label-username" class="" > Username : </label> <input readonly id="input-username">
+                        <p id="item-username" class="">  </p>
+                            {{form.as_p}}
+                        <label id="label-year" class="" > Year : </label> <input readonly id="input-year">
+                        <br>
+                        <label id="label-category" class="" > Category : </label> <input readonly id="input-category">
+                        <br>
+                        <label id="label-dept" class="" > Department : </label> <input readonly id="input-dept">
+                        
+                        <div>
+                        <button type="submit" class="bg-black text-white p-2 mt-2 rounded-lg"> Submit </button>
+                        </div>
+                    </div>
+
+                    <div class="text-right">
+                        <button onclick="document.getElementById('modal1').close() " class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                            Close
+                        </button>
+                    </div>
+
+                </div>
+            </form>
+            
+        </div>
+    </dialog>
+
+    <dialog id="modal" class=" fixed top-1/2 left-1/2 w-150 h-150 -translate-x-1/2 -translate-y-1/2 bg-black/50">
+        <div class="bg-white p-6 h-full w-full rounded-lg shadow-lg w-96">
+            <div>
+                {% for item in all_items %}
+                    {% for file in item.files %}
+                        <img src="{{ file }}" alt="Item Image" class="w-40 h-40 object-cover">
+                    {% endfor %}
+                {% endfor %}
+
+            </div>
+            <div class="flex w-full text-center justify-center">
+                <h1 id="modal-title" class="text-xl"> </h1>
+                <div id="modal-year" class="text-xl "> </div>
+                <div id="modal-dept" class="text-xl"> </div>
+            </div>
+            <div class="flex ">
+                <div class="font-bold"> Description: </div>
+                <div id="modal-description" class="text-gray-700 ml-2"></div>
+            </div>
+            <div class="flex ">
+                <div class="font-bold">Category: </div>
+                <div id="modal-category" class="text-gray-700 ml-2"></div>
+            </div>
+            <div class="flex ">
+                <div class="font-bold">Department: </div>
+                <div id="modal-department" class="text-gray-700 ml-2"></div>
+            </div>
+            <p id="modal-description" class="text-gray-700 mt-2"></p>
+            <p id="modal-category" class="text-gray-700 mt-2"></p>
+            <p id="modal-department" class="text-gray-700 mt-2"></p>
+            <div class="text-right">
+            <button onclick="document.getElementById('modal').close() " class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                Close
+            </button>
+        </div>
+        </div>
+    </dialog>
+
+    <div class="max-w-6xl mt-2 mx-2  w-full ">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 ">
+            {% for item in all_items %}
+            <div class="bg-white p-6 rounded-lg relative shadow-lg flex flex-col">
+                    <h2 class="mt-2 text-xl my-2 font-semibold text-gray-900">
+                        <button class="underline hover-cursor-pointer "> {{item.name}} </button> ({{item.year}} {{item.department}})
+                    </h2>
+                    <p class="mt-2 text-gray-600 flex-grow">
+                        {{item.description}}
+                    </p>
+                    <div class="mt-4">
+                        <div class="">
+                            <p class="text-sm font-medium text-gray-900">{{item.name}}</p>
+                            <p class="text-sm text-gray-500">{{item.category}}</p>
+                        </div>
+                    </div>
+                    <div class="mt-3 text-xs flex justify-between">
+                        <div> {{item.date_posted}}</div>
+                            <div class="text-white text-right">
+                                {% if item.sUsername == curr_username or member.roles == 'Teacher'%}
+                                <button data-item-username="{{ item.sUsername }}" data-item-id="{{ item.id }}" data-item-year="{{item.year}}" data-item-name="{{ item.name }}" 
+                                    data-item-description="{{ item.description }}" data-item-category="{{item.category}}" data-item-department="{{ item.department }}"
+                                    class="update-modal-button bg-black hover:cursor-pointer text-xs text-white rounded-lg p-2 transition-colors">
+                                    Update
+                                </button>
+                                {% endif %}
+                                <button data-item-id="{{ item.id }}" data-item-year="{{item.year}}" data-item-name="{{ item.name }}" 
+                                    data-item-description="{{ item.description }}" data-item-category="{{item.category}}" data-item-department="{{ item.department }}"
+                                    class="show-more-modal-button bg-black hover:cursor-pointer text-xs text-white rounded-lg p-2 transition-colors">
+                                    Show More
+                                </button>
+                            </div>
+                    </div>
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const showMoreButtons = document.querySelectorAll('.show-more-modal-button');
+
+        showMoreButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                document.getElementById('modal-title').textContent = button.dataset.itemName;
+                document.getElementById('modal-description').textContent = button.dataset.itemDescription;
+                document.getElementById('modal-category').textContent = button.dataset.itemCategory;
+                document.getElementById('modal-department').textContent = button.dataset.itemDepartment;
+                document.getElementById('modal-year').textContent = `(${button.dataset.itemYear}-`;
+                document.getElementById('modal-dept').textContent = `${button.dataset.itemDepartment})`;
+
+                document.getElementById('modal').showModal(); 
+            });
+        });
+
+        const updateButtons = document.querySelectorAll('.update-modal-button');
+
+        updateButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                document.getElementById('input-username').value = button.dataset.itemUsername;
+                document.getElementById('modal-description').textContent = button.dataset.itemDescription;
+                document.getElementById('input-category').value = button.dataset.itemCategory;
+                document.getElementById('input-year').value = button.dataset.itemYear;
+                document.getElementById('input-dept').value = button.dataset.itemDepartment;
+                document.getElementById('form-id').action = `/update/${button.dataset.itemId}/`;
+                document.getElementById('modal1').showModal();
+            });
+        });
+    });
+</script>
+
+
+
+{% endblock %}

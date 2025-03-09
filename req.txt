@@ -1,0 +1,19 @@
+required setup:
+
+start sql server
+
+sql commands:
+
+    create database activitynest;
+    use activitynest
+    create user (username)@localhost identified by '(password)';
+    grant all privileges on activitynest.* to (username)@localhost;
+
+terminal commands:
+    python -m venv venv
+    venv/Scripts/activate
+    pip install > PIPreq.txt
+    cd activitynest
+    python manage.py makemigrations
+    python manage.py migrate
+    python manage.py runserver
