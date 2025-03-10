@@ -1,37 +1,16 @@
-{% extends "layout.html" %}
-
-{% block title %}
-    {{dept | upper}}
-{% endblock %}
-
-{% block bar_title%}
-    Welcome to {{dept | upper}} Department!
-{% endblock %}
-
-{% block cat_ach %}
-{% url 'display_category' dept 'achievement' %}
-{% endblock %}
-
-{% block cat_pla %}
-{% url 'display_category' dept 'placement' %}
-{% endblock %}
-
-{% block cat_cer %}
-{% url 'display_category' dept 'certificate' %}
-{% endblock %}
+{%extends "layout.html"%}
 
 
-{% block data %}
+{% block data%}
+
+
+
 <div class="flex">
-    <div class="h-full shadow-lg">
-        <h2>Department Contribution</h2>
-        <img src="{% url 'pie_chart_year_dept' dept=dept %}" class="rounded-full" alt="Department Pie Chart" style="width: 100%; max-width: 600px; height: auto;">
-    </div>
 
     <dialog id="modal" class=" fixed top-1/2 left-1/2 w-150 h-150 -translate-x-1/2 -translate-y-1/2 bg-black/50">
         <div class="bg-white p-6 h-full w-full rounded-lg shadow-lg w-96">
-            <div>
-                <img src="https://cdn.britannica.com/55/174255-050-526314B6/brown-Guernsey-cow.jpg" class="object-cover">
+            <div class="">
+                <img id="item-image" class="w-70 object-cover">
             </div>
             <div class="flex w-full text-center justify-center">
                 <h1 id="modal-title" class="text-xl"> </h1>
@@ -63,7 +42,7 @@
 
     <div class="max-w-6xl mt-2 mx-2  w-full ">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-2 ">
-            {% for item in dept_items %}
+            {% for item in category_items %}
             <div class="bg-white p-6 rounded-lg relative shadow-lg flex flex-col">
                     <h2 class="mt-2 text-xl my-2 font-semibold text-gray-900">
                         <button class="underline hover-cursor-pointer "> {{item.name}} </button> ({{item.year}} {{item.department}})
@@ -80,8 +59,26 @@
                     <div class="mt-3 text-xs flex justify-between">
                         <div> {{item.date_posted}}</div>
                             <div class="text-white text-right">
-                                <button data-item-id="{{ item.id }}" data-item-year="{{item.year}}" data-item-name="{{ item.name }}" data-item-description="{{ item.description }}" data-item-category="{{item.category}}" data-item-department="{{ item.department }}"
-                                    class="show-data modal-button bg-black hover:cursor-pointer text-xs text-white rounded-lg p-2 transition-colors">
+                                {% if item.sUsername == curr_username%}
+                                <button data-item-image="{{item.files}}" data-item-username="{{ item.sUsername }}" data-item-id="{{ item.id }}" data-item-year="{{item.year}}" data-item-name="{{ item.name }}" 
+                                    data-item-description="{{ item.description }}" data-item-category="{{item.category}}" data-item-department="{{ item.department }}"
+                                    class="update-modal-button bg-black hover:cursor-pointer text-xs text-white rounded-lg p-2 transition-colors">
+                                    Update
+                                </button>
+                                {% endif %}
+                                <button 
+                                    {% if item.files%}
+
+                                        {% for item in item.files%}
+                                            data-item-image="{{item}}"
+                                        {%endfor%}
+                                    
+                                    {%endif%}
+                                
+                                
+                                 data-item-id="{{ item.id }}" data-item-year="{{item.year}}" data-item-name="{{ item.name }}" 
+                                    data-item-description="{{ item.description }}" data-item-category="{{item.category}}" data-item-department="{{ item.department }}"
+                                    class="show-more-modal-button bg-black hover:cursor-pointer text-xs text-white rounded-lg p-2 transition-colors">
                                     Show More
                                 </button>
                             </div>
@@ -94,31 +91,26 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const buttons = document.querySelectorAll('.show-data');
+        const showMoreButtons = document.querySelectorAll('.show-more-modal-button');
 
-        buttons.forEach(button => {
+        showMoreButtons.forEach(button => {
             button.addEventListener('click', () => {
-                const itemName = button.dataset.itemName;
-                const itemDescription = button.dataset.itemDescription;
-                const itemCategory = button.dataset.itemCategory;
-                const itemDepartment = button.dataset.itemDepartment;
-                const itemYear = button.dataset.itemYear
-
-
-                document.getElementById('modal-title').textContent = itemName+' ';
-                document.getElementById('modal-description').textContent = itemDescription;
-                document.getElementById('modal-category').textContent = itemCategory;
-                document.getElementById('modal-department').textContent = itemDepartment;
-                document.getElementById('modal-year').textContent = '('+itemYear+'-';
-                document.getElementById('modal-dept').textContent = itemDepartment+')';
-
-
+                document.getElementById('modal-title').textContent = button.dataset.itemName;
+                document.getElementById('modal-description').textContent = button.dataset.itemDescription;
+                document.getElementById('modal-category').textContent = button.dataset.itemCategory;
+                document.getElementById('modal-department').textContent = button.dataset.itemDepartment;
+                document.getElementById('modal-year').textContent = `(${button.dataset.itemYear}-`;
+                document.getElementById('modal-dept').textContent = `${button.dataset.itemDepartment})`;
+                document.getElementById('item-image').src = `${button.dataset.itemImage}`;
 
                 document.getElementById('modal').showModal(); 
             });
         });
+        
     });
 </script>
+
+
 
 
 {% endblock %}

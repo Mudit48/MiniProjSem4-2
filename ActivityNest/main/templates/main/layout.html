@@ -54,6 +54,49 @@
     });
 
     document.addEventListener('DOMContentLoaded', function () {
+      const departmentsButton = document.getElementById('events-button');
+      const departmentsDropdown = document.getElementById('events-dropdown');
+    
+      function showDropdown() {
+        departmentsDropdown.classList.remove('hidden');
+        departmentsDropdown.classList.add('transition', 'ease-out', 'duration-100', 'transform', 'opacity-0', 'scale-95');
+        void departmentsDropdown.offsetWidth; 
+        departmentsDropdown.classList.replace('opacity-0', 'opacity-100');
+        departmentsDropdown.classList.replace('scale-95', 'scale-100');
+      }
+    
+      function hideDropdown() {
+        departmentsDropdown.classList.add('transition', 'ease-in', 'duration-75', 'transform', 'opacity-100', 'scale-100');
+        departmentsDropdown.classList.replace('opacity-100', 'opacity-0');
+        departmentsDropdown.classList.replace('scale-100', 'scale-95');
+        setTimeout(() => {
+          departmentsDropdown.classList.add('hidden');
+        }, 75); 
+      }
+    
+      departmentsButton.addEventListener('click', function () {
+        if (departmentsDropdown.classList.contains('hidden')) {
+          showDropdown();
+        } else {
+          hideDropdown();
+        }
+      });
+    
+      document.addEventListener('click', function (event) {
+        const isClickInside = departmentsButton.contains(event.target) || departmentsDropdown.contains(event.target);
+        if (!isClickInside && !departmentsDropdown.classList.contains('hidden')) {
+          hideDropdown();
+        }
+      });
+    
+      departmentsDropdown.addEventListener('focusout', function (event) {
+        if (!departmentsDropdown.contains(event.relatedTarget)) {
+          hideDropdown();
+        }
+      });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
       const userButton = document.getElementById('user-menu-button');
       const userDropdown = document.getElementById('user_profile');
     
@@ -121,7 +164,7 @@
                 <button  type="button" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white" id="departments-button">
                   Departments
                 </button>
-                <button  type="button" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white" id="departments-button">
+                <button  type="button" id="events-button" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white" id="departments-button">
                     Events
                   </button>
                   {% if user.is_authenticated and member.roles == 'Teacher' %}
@@ -129,6 +172,56 @@
                     List Item
                   </a>
                   {% endif %}
+                  
+                  <div id="events-dropdown" class="hidden z-50 absolute left-1/4  mt-9   -translate-x-1/8 px-4 ">
+                    <div class="w-64 max-w-md flex-auto overflow-hidden rounded-3xl bg-white text-sm/6 ring-1 shadow-lg ring-gray-900/5">
+                      <div class="p-4">
+                        <div class="group relative flex gap-x-6 rounded-lg p-4 hover:bg-gray-50">
+                          <div class="mt-1 flex size-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
+                            <div class="mt-1 flex  flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
+                              <img class="size-9" 
+                              src="https://i.imgur.com/pQbOiua.png"
+                              >
+                            </div>
+                          </div>
+                          <div>
+                            <a href="{%block cat_ach%}{% url 'category' 'achievement' %}{%endblock%}" class="font-semibold text-gray-900">
+                              achievements
+                              <span class="absolute inset-0"></span>
+                            </a>
+                          </div>
+                        </div>
+                        <div class="group relative flex gap-x-6 rounded-lg p-4 hover:bg-gray-50">
+                          <div class="mt-1 flex size-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
+                            <img class="size-9 " 
+                              src="https://i.imgur.com/tqcGbhm.png"
+                              >
+                          </div>
+                          <div>
+                            <a href="{%block cat_cer%}{% url 'category' 'certificate' %}{%endblock%}" class="font-semibold text-gray-900">
+                              Certificate
+                              <span class="absolute inset-0"></span>
+                            </a>
+                          </div>
+                        </div>
+                        <div class="group relative flex gap-x-6 rounded-lg p-4 hover:bg-gray-50">
+                          <div class="mt-1 flex size-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
+                            <img class="size-9 " 
+                              src="https://i.imgur.com/wlCUvPU.png"
+                              >
+                          </div>
+                          <div>
+                            <a href="{%block cat_pla%}{% url 'category' 'placement' %}{%endblock%}" class="font-semibold text-gray-900">
+                              placement
+                              <span class="absolute inset-0"></span>
+                            </a>
+                          </div>
+                        </div>
+                        
+                      </div>
+                    </div>
+                  </div>
+                  
                 <div id="departments-dropdown" class="hidden z-50 absolute left-1/4  mt-9   -translate-x-1/2 px-4 ">
                   <div class="w-64 max-w-md flex-auto overflow-hidden rounded-3xl bg-white text-sm/6 ring-1 shadow-lg ring-gray-900/5">
                     <div class="p-4">
@@ -179,7 +272,7 @@
                           </svg>
                         </div>
                         <div>
-                          <a href="#" class="font-semibold text-gray-900">
+                          <a href="{% url 'dept' 'extc'%}" class="font-semibold text-gray-900">
                             EXTC
                             <span class="absolute inset-0"></span>
                           </a>

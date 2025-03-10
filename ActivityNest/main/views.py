@@ -75,6 +75,22 @@ def profile(req, username):
         member = get_object_or_404(Member, user=req.user)
         print(member.roles)
     return render(req, 'profile.html', {'user_items': user, 'member' : member})
+
+def category_item(req, dept, category):
+    category_items = Item.objects.filter(category__iexact=category, department__iexact=dept)
+    if req.user.is_authenticated:
+        member = get_object_or_404(Member, user=req.user)
+        print(member.roles)
+    
+    return render(req, 'category_dept.html', {'category_items': category_items, 'dept' : dept, 'member' : member})
+
+def category(req, category):
+    category_items = Item.objects.filter(category__iexact=category)
+    if req.user.is_authenticated:
+        member = get_object_or_404(Member, user=req.user)
+        print(member.roles)
+    
+    return render(req, 'category.html', {'category_items': category_items, 'member' : member})
     
 
 @login_required
