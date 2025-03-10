@@ -30,7 +30,13 @@ def home(req):
     all_items = Item.objects.all()
     form = UpdateListForm()
     username = req.user.username
-    return render(req, 'index.html', {'all_items': all_items ,'chart_url': '/pie-chart/', 'curr_username' : username,  'form' : form} )
+    user = req.user
+    member = {}
+    if req.user.is_authenticated:
+        member = get_object_or_404(Member, user=req.user)
+        print(member.roles)
+    
+    return render(req, 'index.html', {'all_items': all_items ,'chart_url': '/pie-chart/', 'curr_username' : username,  'form' : form , 'user' : user , 'member' : member } )
 
 def updt(request, item_id):
     item = get_object_or_404(Item, id=item_id)  # Fetch the existing item
@@ -57,13 +63,18 @@ def department(req, dept):
     if dept in dep:
         dept.upper()
         dept_items = Item.objects.filter(department__iexact=dept)
-        return render(req, 'department.html' , { "dept" : dept, 'dept_items' :dept_items, 'chart_year_url': '/pie-chart-year/'} )
+        if req.user.is_authenticated:
+            member = get_object_or_404(Member, user=req.user)
+        return render(req, 'department.html' , { "dept" : dept, 'dept_items' :dept_items, 'chart_year_url': '/pie-chart-year/', 'member' : member} )
     else:
         return render(req, '404.html')
     
 def profile(req, username):
     user = Item.objects.filter(sUsername__iexact=username)
-    return render(req, 'profile.html', {'user_items': user})
+    if req.user.is_authenticated:
+        member = get_object_or_404(Member, user=req.user)
+        print(member.roles)
+    return render(req, 'profile.html', {'user_items': user, 'member' : member})
     
 
 @login_required
@@ -86,7 +97,6 @@ def list_item(req):
             item.files=uploaded_urls
             item.department = department
             item.save()
-            print("Item saved.")
             return redirect('home')
         else:
             return HttpResponse("Invalid form")
