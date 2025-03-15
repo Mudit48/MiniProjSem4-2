@@ -8,6 +8,19 @@
     Welcome to {{dept | upper}} Department!
 {% endblock %}
 
+{% block cat_ach %}
+{% url 'display_category' dept 'achievement' %}
+{% endblock %}
+
+{% block cat_pla %}
+{% url 'display_category' dept 'placement' %}
+{% endblock %}
+
+{% block cat_cer %}
+{% url 'display_category' dept 'certificate' %}
+{% endblock %}
+
+
 {% block data %}
 <div class="flex">
     <div class="h-full shadow-lg">

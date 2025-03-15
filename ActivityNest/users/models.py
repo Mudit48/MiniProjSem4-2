@@ -9,9 +9,15 @@ dept_choice = {
     "CS" : "CS"
 }
 
+class RoleChoices(models.TextChoices):
+    TEACHER = "Teacher", "Teacher"
+    STUDENT = "Student", "Student"
+
 class Member(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     department = models.CharField(max_length=10, default="EXTC", choices=dept_choice)
+    roles = models.CharField(max_length=20 , default=RoleChoices.STUDENT,choices=RoleChoices.choices)
+
 
     def __str__(self):
         return self.user.email

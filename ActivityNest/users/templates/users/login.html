@@ -3,84 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Account</title>
-    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <title>Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
-        body {
+        * {
             font-family: 'Inter', sans-serif;
+        }
+        input {
+            font-family: 'Poppins', sans-serif;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.8s ease-out;
         }
     </style>
 </head>
-<body >
-    <div class="bg-white absolute">
-        {% if messages %}
-            {% for message in messages %}
-        <div class="flex w-full max-w-sm overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800">
-            <div class="flex items-center justify-center w-12 bg-emerald-500">
-                <svg class="w-6 h-6 text-white fill-current" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M20 3.33331C10.8 3.33331 3.33337 10.8 3.33337 20C3.33337 29.2 10.8 36.6666 20 36.6666C29.2 36.6666 36.6667 29.2 36.6667 20C36.6667 10.8 29.2 3.33331 20 3.33331ZM16.6667 28.3333L8.33337 20L10.6834 17.65L16.6667 23.6166L29.3167 10.9666L31.6667 13.3333L16.6667 28.3333Z" />
-                </svg>
-            </div>
+<body class="bg-gradient-to-br from-cyan-100 to-blue-50 flex items-center justify-center min-h-screen">
+
+    <div class="relative flex flex-col md:flex-row w-full max-w-4xl bg-white shadow-2xl rounded-3xl overflow-hidden fade-in">
         
-            <div class="px-4 py-2 -mx-3">
-                <div class="mx-3">
-                    <span class="font-semibold text-emerald-500 dark:text-emerald-400">Success</span>
-                    <p class="text-sm text-gray-600 dark:text-gray-200 alert alert-{{ message.tags }}">{{ message }}</p>
+        <div class="hidden md:flex md:w-1/2 bg-blue-950 text-white  flex-col justify-center items-center relative">
+            <div class="">
+                <img src="https://i.imgur.com/d4Ucyxs.png" alt="Logo" class="rounded-xl w-full">
                 </div>
-            </div>
-        </div>
-        {% endfor %}
-        {% endif %}
-    </div>
-    <div class="bg-[#1c1c24] min-h-screen flex items-center justify-center p-4">
-    <div class="w-full max-w-[1200px] bg-[#13131a] rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row">
-        <!-- Left Section -->
-        <div class="w-full md:w-1/2 relative">
-            <a href="{%url 'home'%}" class="absolute top-6 right-6 bg-white/10 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm hover:bg-white/20 transition-colors z-10">
-                Back to website →
-            </a>
-            <div class="relative h-full">
-                <img src="https://api.deepai.org/job-view-file/a3fcb7c9-b0fe-407e-af0e-aa2399d53aba/outputs/output.jpg"
-                     alt="Desert landscape"
-                     class="w-full h-full object-cover">
-                <div class="absolute inset-0 bg-purple-900/30"></div>
-                <div class="absolute bottom-12 left-12 text-white">
-                    <div class="flex gap-2 mt-6">
-                      
-                    </div>
-                </div>
-            </div>
         </div>
 
-        <!-- Right Section -->
-        <div class="w-full md:w-1/2 p-6 md:p-12">
-            <div class="max-w-md mx-auto">
-                <h1 class="text-white text-2xl font-semibold mb-5">{% if messages %}
-                    {% for message in messages %}
-                        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-                    {% endfor %}
-                    {% endif %}Login</h1>
+        <div class="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
 
-                <form class="space-y-4" action="{%url 'login'%}" method="POST">
-                    {% csrf_token %}
-                    <input type="email" name="email"placeholder="Email" class="w-full bg-[#1c1c24] text-white rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-purple-600">
+            <h2 class="text-2xl font-semibold text-gray-800 text-center">Login</h2>
+            <p class="text-gray-500 text-center mb-6">Access your account</p>
+
+            {% if messages %}
+            <div class="absolute top-6 right-6 space-y-3">
+                {% for message in messages %}
+                <div class="p-4 border-l-4 {% if message.tags == 'success' %}border-green-500 bg-green-100{% elif message.tags == 'error' %}border-red-500 bg-red-100{% endif %} text-gray-700 rounded-lg shadow fade-in">
+                    <span class="font-semibold">{{ message }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <form action="{% url 'login' %}" method="POST" class="space-y-5">
+                {% csrf_token %}
+                
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-1">Email</label>
+                    <input type="email" name="email" required placeholder="Enter your email"
+                        class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-400 transition-all">
+                </div>
+
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-1">Password</label>
                     <div class="relative">
-                        <input type="password" name="password"placeholder="password" class="w-full bg-[#1c1c24] text-white rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-purple-600">
-                        <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2">
+                        <input type="password" name="password" id="password" required placeholder="Enter your password"
+                            class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-400 transition-all">
+                        <button type="button" id="togglePassword" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-all">
+                            <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0zm6 0c0 2.5-4 7-9 7s-9-4.5-9-7 4-7 9-7 9 4.5 9 7z"></path>
+                            </svg>
                         </button>
                     </div>
-                    <div class="text-1xl text-white text-right"> 
-                    <a href="{%url 'register' %}"> Create an Account </a>
-                    </div>
-                    <button type="submit" class="hover:cursor-pointer my-5 w-full bg-purple-600 text-white rounded-lg p-3 hover:bg-purple-700 transition-colors ">
-                        Login
-                    </button>
-                 
-                </form>
-            </div>
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-3 rounded-lg transition-all shadow-md hover:shadow-xl">
+                    Login
+                </button>
+
+                <p class="text-center text-gray-500 text-sm">Don't have an account?
+                    <a href="{% url 'register' %}" class="text-cyan-500 hover:text-cyan-600 transition-all">Create one</a>
+                </p>
+            </form>
         </div>
     </div>
-</div>
+
+    <script>
+        document.getElementById('togglePassword').addEventListener('click', function () {
+            const passwordField = document.getElementById('password');
+            const eyeIcon = document.getElementById('eyeIcon');
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                eyeIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m4 0h-4m10 4c0 2.5-4 7-9 7s-9-4.5-9-7 4-7 9-7 9 4.5 9 7z"></path>';
+            } else {
+                passwordField.type = 'password';
+                eyeIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0zm6 0c0 2.5-4 7-9 7s-9-4.5-9-7 4-7 9-7 9 4.5 9 7z"></path>';
+            }
+        });
+    </script>
+
 </body>
 </html>

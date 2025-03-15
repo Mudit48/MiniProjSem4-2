@@ -20,7 +20,7 @@ class Item(models.Model):
     name = models.CharField(max_length=100)
     category = models.CharField(max_length=100, blank=False, choices=category_items)
     description = models.CharField(max_length=200)
-    date_posted = models.DateTimeField(auto_now_add=True)
+    date_posted = models.DateField(auto_now_add=True)
     department = models.CharField(max_length=4)
     year = models.CharField(max_length=2, null=True, choices=year_choice)
     files=models.JSONField(default=list)
