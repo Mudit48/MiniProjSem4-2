@@ -3,35 +3,49 @@ from .models import Item
 from .models import category_items, year_choice
 
 class ListForm(forms.ModelForm):
+    doe = forms.DateField(
+        label = 'Date of event',
+        widget=forms.DateInput(attrs={
+            'type': 'date',
+            'class': 'w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:outline-none text-lg'
+        })
+    )
+    
     sUsername = forms.CharField(
+        label = 'Username of student',
         widget=forms.TextInput(attrs={
             'class': 'w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:outline-none text-lg'
         })
     )
     name = forms.CharField(
+        label = 'Name of student',
         widget=forms.TextInput(attrs={
             'class': 'w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:outline-none text-lg'
         })
     )
     department = forms.CharField(
+        label = 'Department',
         widget=forms.TextInput(attrs={
             'readonly': 'readonly',
             'class': 'w-full p-3 bg-gray-200 border border-gray-300 rounded-lg focus:outline-none text-lg'
         })
     )
     category = forms.ChoiceField(
+        label = 'Category',
         choices=category_items,
         widget=forms.Select(attrs={
             'class': 'w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:outline-none text-lg'
         })
     )
     year = forms.ChoiceField(
+        label = 'Year of Study',
         choices=year_choice,
         widget=forms.Select(attrs={
             'class': 'w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:outline-none text-lg'
         })
     )
     description = forms.CharField(
+        label = 'Event Description',
         widget=forms.Textarea(attrs={
             'class': 'w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:outline-none text-lg resize-none',
             'rows' : '2'
@@ -41,7 +55,7 @@ class ListForm(forms.ModelForm):
 
     class Meta:
         model = Item
-        fields = ("sUsername", "name", "category", "description", "department", "year")
+        fields = ("sUsername", "name", "category", "description", "department", "year", "doe")
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None) 

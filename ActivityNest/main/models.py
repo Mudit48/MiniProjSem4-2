@@ -24,6 +24,7 @@ class Item(models.Model):
     department = models.CharField(max_length=4)
     year = models.CharField(max_length=2, null=True, choices=year_choice)
     files=models.JSONField(default=list)
+    doe= models.DateField(null=True)
 
     def __str__(self):
         return self.name

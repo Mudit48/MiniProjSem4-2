@@ -55,20 +55,27 @@ def home(req):
     return render(req, 'index.html', {'all_items': all_items ,'chart_url': '/pie-chart/', 'curr_username' : username,  'form' : form , 'user' : user , 'member' : member } )
 
 def updt(request, item_id):
-    item = get_object_or_404(Item, id=item_id)  # Fetch the existing item
+    item = get_object_or_404(Item, id=item_id)  
 
     if request.method == "POST":
-        form = UpdateListForm(request.POST, instance=item)  # Ensure using UpdateListForm
+        form = UpdateListForm(request.POST, instance=item)  
         if form.is_valid():
             print(form)
-            form.save()  # Update only the description
-            return redirect('home')  # Redirect to the homepage
+            form.save()  
+            return redirect('home') 
         else:
             print(form.errors)
     
     else:
         form = UpdateListForm(instance=item)  # Load existing data
 
+    return redirect('home')
+
+def deleteButton(req, id):
+    cell = sheet.find(str(id), in_column=1)
+    sheet.delete_rows(cell.row)
+    item = Item.objects.get(id=id)
+    item.delete()
     return redirect('home')
 
 
@@ -81,7 +88,9 @@ def department(req, dept):
         dept_items = Item.objects.filter(department__iexact=dept)
         if req.user.is_authenticated:
             member = get_object_or_404(Member, user=req.user)
-        return render(req, 'department.html' , { "dept" : dept, 'dept_items' :dept_items, 'chart_year_url': '/pie-chart-year/', 'member' : member} )
+            return render(req, 'department.html' , { "dept" : dept, 'dept_items' :dept_items, 'chart_year_url': '/pie-chart-year/', 'member' : member} )
+        else:
+            return render(req, 'department.html' , { "dept" : dept, 'dept_items' :dept_items, 'chart_year_url': '/pie-chart-year/'} )
     else:
         return render(req, '404.html')
     
@@ -105,8 +114,11 @@ def category(req, category):
     if req.user.is_authenticated:
         member = get_object_or_404(Member, user=req.user)
         print(member.roles)
+        return render(req, 'category.html', {'category_items': category_items, 'member' : member})
+    else:
+        return render(req, 'category.html', {'category_items': category_items})
     
-    return render(req, 'category.html', {'category_items': category_items, 'member' : member})
+    
     
 
 @login_required
@@ -123,11 +135,7 @@ def list_item(req):
             category = form.cleaned_data["category"]
             description = form.cleaned_data["description"]
             year = form.cleaned_data["year"]
-            
-
-
-            
-
+            doe = str(form.cleaned_data["doe"])
 
             item = form.save(commit=False)
             files = req.FILES.getlist("files")  # Get multiple files from form
@@ -143,7 +151,7 @@ def list_item(req):
             item.save()
             item.refresh_from_db()
             id = item.id
-            sheet.append_row([id,name,username,department,category,description,year])
+            sheet.append_row([id,name,username,department,category,description,year,doe])
             return redirect('home')
         else:
             return HttpResponse("Invalid form")

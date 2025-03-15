@@ -12,6 +12,7 @@ urlpatterns = [
     path("user/<str:username>/", views.profile, name="profile"),
     path("category/<str:dept>/<str:category>/", views.category_item, name="display_category"),
     path("category/<str:category>", views.category, name="category"),
+    path("delete/<str:id>", views.deleteButton, name="delete"),
     path("__reload__/", include("django_browser_reload.urls")),
 
 ]

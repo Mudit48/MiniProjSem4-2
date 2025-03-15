@@ -16,7 +16,7 @@
             <h1 class=""> Contribution by Departments </h1>
         </div>
     </div>
-    <dialog id="modal1" class=" fixed top-1/2 left-1/2 w-100 h-100 -translate-x-1/2 -translate-y-1/2 bg-black/50">
+    <dialog id="modal1" class="fixed top-1/2 left-1/2 w-100 h-100 -translate-x-1/2 -translate-y-1/2 bg-black/50">
         <div class="flex items-center justify-center bg-white p-6 h-full w-full rounded-lg shadow-lg w-96">
             <form id="form-id" method="POST">
                 <div class="">
@@ -48,10 +48,10 @@
         </div>
     </dialog>
 
-    <dialog id="modal" class=" fixed top-1/2 left-1/2 w-150 h-150 -translate-x-1/2 -translate-y-1/2 bg-black/50">
-        <div class="bg-white p-6 h-full w-full rounded-lg shadow-lg w-96">
-            <div class="">
-                <img id="item-image" class="object-cover h-70">
+    <dialog id="modal" class=" fixed  top-1/2 left-1/2 w-200 h-200 -translate-x-1/2 -translate-y-1/2 bg-black/50">
+        <div class="bg-white p-6 h-full w-full rounded-lg shadow-lg">
+            <div class="w-72 h-72">
+                <img id="item-image" class="">
             </div>
             <div class="flex w-full text-center justify-center">
                 <h1 id="modal-title" class="text-xl"> </h1>
@@ -100,6 +100,13 @@
                     <div class="mt-3 text-xs flex justify-between">
                         <div> {{item.date_posted}}</div>
                             <div class="text-white text-right">
+                                {% if member.roles == 'Teacher'%}
+                                <a href="{% url 'delete' item.id %}" data-item-username="{{ item.sUsername }}" data-item-id="{{ item.id }}" data-item-year="{{item.year}}" data-item-name="{{ item.name }}" 
+                                data-item-description="{{ item.description }}" data-item-category="{{item.category}}" data-item-department="{{ item.department }}"
+                                class="delete-data bg-black hover:cursor-pointer text-xs text-white rounded-lg p-2 transition-colors">
+                                    Delete
+                                </a>
+                                {% endif %}
                                 {% if item.sUsername == curr_username or member.roles == 'Teacher'%}
                                 <button data-item-image="{{item.files}}" data-item-username="{{ item.sUsername }}" data-item-id="{{ item.id }}" data-item-year="{{item.year}}" data-item-name="{{ item.name }}" 
                                     data-item-description="{{ item.description }}" data-item-category="{{item.category}}" data-item-department="{{ item.department }}"
@@ -112,6 +119,7 @@
                                     {% if item.files%}
 
                                         {% for item in item.files%}
+                                    
                                             data-item-image="{{item}}"
                                         {%endfor%}
 
