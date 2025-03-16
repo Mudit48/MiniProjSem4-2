@@ -1,5 +1,5 @@
 from django import forms
-from .models import Member, dept_choice
+from .models import Member, dept_choice, year_choice
 
 class MemberForm(forms.ModelForm):
     full_name = forms.CharField(widget=forms.TextInput(attrs={
@@ -21,12 +21,16 @@ class MemberForm(forms.ModelForm):
     }), label='')
 
     department = forms.ChoiceField(choices=dept_choice, widget=forms.Select(attrs={
-        'class': 'w-52 my-2 bg-[#1c1c24] text-white rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-600'
+        'class': 'w-52 my-2 bg-[#1c1c24] text-white rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-600 inline-block'
+    }), label='')
+
+    year = forms.ChoiceField(choices=year_choice, widget=forms.Select(attrs={
+        'class': 'w-52 my-2 bg-[#1c1c24] text-white rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-600 inline-block'
     }), label='')
 
     class Meta:
         model = Member
-        fields = ['department']  # Only department (email & password handled in views)
+        fields = ['department'] 
 
 
 class LoginForm(forms.Form):  # Use Form instead of ModelForm

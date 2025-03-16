@@ -15,8 +15,8 @@ def register(req):
             password = form.cleaned_data['password']
             department = form.cleaned_data['department']
 
-            if User.objects.filter(username=email).exists():
-                messages.error(req, "This email is already registered. Try logging in.")
+            if User.objects.filter(username=username).exists():
+                messages.error(req, "This username is already taken.")
                 return render(req, 'register.html', {'form': form})
 
             user = User.objects.create_user( username=username, email=email, password=password)
@@ -25,6 +25,8 @@ def register(req):
 
             messages.success(req, 'Registration successful! You can now log in.')
             return redirect('login')
+        else:
+            return render(req, 'register.html', {'form': form})
 
     form = MemberForm()
     return render(req, 'register.html', {'form': form})
