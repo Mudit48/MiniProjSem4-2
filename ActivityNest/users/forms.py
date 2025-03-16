@@ -3,7 +3,7 @@ from .models import Member, dept_choice
 
 class MemberForm(forms.ModelForm):
     full_name = forms.CharField(widget=forms.TextInput(attrs={
-        'class': 'w-52 my-2 bg-[#1c1c24] text-white rounded-lg p-2 focus:outline-none w-full focus:ring-2 focus:ring-purple-600', 'placeholder' : 'username'
+        'class': 'w-52 my-2 bg-[#1c1c24] text-white rounded-lg p-2 focus:outline-none w-full focus:ring-2 focus:ring-purple-600', 'placeholder' : 'Full Name'
     }), label='')
 
     username = forms.CharField(widget=forms.TextInput(attrs={

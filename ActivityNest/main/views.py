@@ -10,7 +10,6 @@ import cloudinary.uploader
 import gspread
 from google.oauth2.service_account import Credentials
 from django.conf import settings
-from django.contrib.auth.models import User
 
 scopes = [
     "https://www.googleapis.com/auth/spreadsheets"
@@ -99,10 +98,17 @@ def department(req, dept):
     else:
         return render(req, '404.html')
     
+from django.contrib.auth.models import User
 def profile(request, username):
-    user = get_object_or_404(User, username=username)
-    user_mem = get_object_or_404(Member, user=user)
     user_items = Item.objects.filter(sUsername__iexact=username)
+
+    try:
+        user = get_object_or_404(User, username=username)
+        user_mem = get_object_or_404(Member, user=user)
+    except:
+        user_mem = None
+    
+  
 
     return render(request, 'profile.html', {
         'user_items': user_items,

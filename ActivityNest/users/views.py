@@ -9,6 +9,7 @@ def register(req):
     if req.method == "POST":
         form = MemberForm(req.POST)
         if form.is_valid():
+            full_name = form.cleaned_data['full_name']
             username = form.cleaned_data['username']
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
@@ -18,9 +19,9 @@ def register(req):
                 messages.error(req, "This email is already registered. Try logging in.")
                 return render(req, 'register.html', {'form': form})
 
-            user = User.objects.create_user(username=username, email=email, password=password)
+            user = User.objects.create_user( username=username, email=email, password=password)
 
-            member = Member.objects.create(user=user, department=department)
+            member = Member.objects.create(user=user, department=department, full_name = full_name)
 
             messages.success(req, 'Registration successful! You can now log in.')
             return redirect('login')

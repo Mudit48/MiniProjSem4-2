@@ -4,25 +4,33 @@
 Profile of {{ username }}
 {%endblock%}
 
-{% block profile %}
 
-    <div class="w-1/3 h-full bg-white p-6 rounded-lg relative shadow-lg flex flex-col">
+
+{% block profile %}
+{%if user != None%}
+    <div class="mt-2 ml-2 w-1/2 h-full bg-white p-6 rounded-lg relative shadow-lg flex flex-col">
         <div class="flex justify-center">
             <img src="{{ profile_picture }}" alt="Profile Picture" class="w-24 h-24 rounded-full">
         </div>
-        <div class="mt-4">
+        <div class="mt-10 p-4">
             <h2 id="prof_name" class="text-xl font-semibold text-gray-900"></h2>
-            <p class="text-sm text-gray-600">@{{ username }}</p>
+            <label class="text-sm text-black">Username: </label> <input readonly value="@{{ username }}"></input>
+            <p class="text-sm text-gray-600">{{ user.full_name }}</p>
             <p class="text-sm text-gray-600">{{ user.department }}</p>
-            <p class="text-sm text-gray-600">{{ user.roles}}</p>
+            <p class="text-sm text-gray-600">{{ user.year}}</p>
         </div>
     </div>
-
+{% endif %}
 {% endblock %}
+
 
 {% block data%}
 
-    
+<div class="max-w-6xl mt-2 mx-2  w-full ">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-2 ">
+        
+
+
 
     {% for item in user_items %}
         <div class="bg-white p-6 rounded-lg relative shadow-lg flex flex-col">
@@ -75,11 +83,8 @@ Profile of {{ username }}
             </div>
         </div>
     {% endfor %}
-
+        
+</div>
+</div>
 {% endblock %}
 
-<script>
-    updateButtons.forEach(button => {
-    document.getElementById('prof_name').textContent = button.dataset.itemName;
-});
-</script>

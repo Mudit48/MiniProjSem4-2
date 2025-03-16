@@ -401,24 +401,20 @@
                 <!--<img id="item-image" src="https://cdn.britannica.com/55/174255-050-526314B6/brown-Guernsey-cow.jpg" class="w-full h-48 object-cover rounded-lg">
             -->
             </div>
-             <!-- Event Title & Details -->
         <div class=" items-center mt-4">
             <h1 id="modal-title" class="text-2xl font-bold text-[#0A233A]"></h1>
             <p id="modal-year" class="text-lg font-medium text-gray-600 inline"></p>
             <p id="modal-dept" class="text-lg font-medium text-gray-600 inline"></p>
         </div>
-            <!-- Event Description -->
         <div class="mt-4 text-gray-700">
             <div class="font-bold text-[#0A233A]">Description:</div>
             <p id="modal-description" class="text-gray-700-sm leading-relaxed mt-1"></p>
         </div>
-           <!-- Event Category -->
         <div class="mt text-gray-700">
             <div class="font-bold text-[#0A233A]">Category:</div>
             <p id="modal-category" class="text-gray-700-sm leading-relaxed"></p>
         </div>
     
-            <!-- Event Department -->
         <div class="mt-4 text-gray-700">
             <div class="font-bold text-[#0A233A]">Department:</div>
             <p id="modal-department" class="text-gray-700-sm leading-relaxed"></p>
@@ -438,14 +434,9 @@
       {%block profile%}
 
       {%endblock%}
-    
-      <div class="max-w-6xl mt-2 mx-2  w-full ">
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-2 ">
-              {%block data%}
-    
-              {%endblock%}
-          </div>
-      </div>
+      {%block data%}
+      
+      {%endblock%}
     </div>
     
     <script>
