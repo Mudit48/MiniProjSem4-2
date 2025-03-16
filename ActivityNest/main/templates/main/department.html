@@ -20,105 +20,69 @@
 {% url 'display_category' dept 'certificate' %}
 {% endblock %}
 
-
-{% block data %}
-<div class="flex">
-    <div class="h-full shadow-lg">
-        <h2>Department Contribution</h2>
-        <img src="{% url 'pie_chart_year_dept' dept=dept %}" class="rounded-full" alt="Department Pie Chart" style="width: 100%; max-width: 600px; height: auto;">
-    </div>
-
-    <dialog id="modal" class=" fixed top-1/2 left-1/2 w-150 h-150 -translate-x-1/2 -translate-y-1/2 bg-black/50">
-        <div class="bg-white p-6 h-full w-full rounded-lg shadow-lg w-96">
-            <div>
-                <img src="https://cdn.britannica.com/55/174255-050-526314B6/brown-Guernsey-cow.jpg" class="object-cover">
-            </div>
-            <div class="flex w-full text-center justify-center">
-                <h1 id="modal-title" class="text-xl"> </h1>
-                <div id="modal-year" class="text-xl "> </div>
-                <div id="modal-dept" class="text-xl"> </div>
-            </div>
-            <div class="flex ">
-                <div class="font-bold"> Description: </div>
-                <div id="modal-description" class="text-gray-700 ml-2"></div>
-            </div>
-            <div class="flex ">
-                <div class="font-bold">Category: </div>
-                <div id="modal-category" class="text-gray-700 ml-2"></div>
-            </div>
-            <div class="flex ">
-                <div class="font-bold">Department: </div>
-                <div id="modal-department" class="text-gray-700 ml-2"></div>
-            </div>
-            <p id="modal-description" class="text-gray-700 mt-2"></p>
-            <p id="modal-category" class="text-gray-700 mt-2"></p>
-            <p id="modal-department" class="text-gray-700 mt-2"></p>
-            <div class="text-right">
-            <button onclick="document.getElementById('modal').close() " class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                Close
-            </button>
-        </div>
-        </div>
-    </dialog>
-
-    <div class="max-w-6xl mt-2 mx-2  w-full ">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 ">
-            {% for item in dept_items %}
-            <div class="bg-white p-6 rounded-lg relative shadow-lg flex flex-col">
-                    <h2 class="mt-2 text-xl my-2 font-semibold text-gray-900">
-                        <button class="underline hover-cursor-pointer "> {{item.name}} </button> ({{item.year}} {{item.department}})
-                    </h2>
-                    <p class="mt-2 text-gray-600 flex-grow">
-                        {{item.description}}
-                    </p>
-                    <div class="mt-4">
-                        <div class="">
-                            <p class="text-sm font-medium text-gray-900">{{item.name}}</p>
-                            <p class="text-sm text-gray-500">{{item.category}}</p>
-                        </div>
-                    </div>
-                    <div class="mt-3 text-xs flex justify-between">
-                        <div> {{item.date_posted}}</div>
-                            <div class="text-white text-right">
-                                <button data-item-id="{{ item.id }}" data-item-year="{{item.year}}" data-item-name="{{ item.name }}" data-item-description="{{ item.description }}" data-item-category="{{item.category}}" data-item-department="{{ item.department }}"
-                                    class="show-data modal-button bg-black hover:cursor-pointer text-xs text-white rounded-lg p-2 transition-colors">
-                                    Show More
-                                </button>
-                            </div>
-                    </div>
-            </div>
-        {% endfor %}
-        </div>
+{%block chart%}
+<div class="h-120 mt-2 text-center pl-3 shadow-lg">
+    <img src="{% url 'pie_chart_year_dept' dept=dept %}" class="object-cover " alt="Department Pie Chart" >
+    <div>
+        <h2 class="text-xl font-semibold text-[#0A233A] mt-4">Year-wise Distribution</h2>
     </div>
 </div>
+{%endblock%}
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const buttons = document.querySelectorAll('.show-data');
+{% block data %}
+{% for item in dept_items%}
+          <div class="bg-white p-6 rounded-lg relative shadow-lg flex flex-col">
+                  <h2 class="mt-2 text-xl my-2 font-semibold text-gray-900">
+                      <a href="{% url 'profile' item.sUsername %}" class="underline hover-cursor-pointer "> {{item.sUsername}} </a> ({{item.year}} {{item.department}})
+                  </h2>
+                  <p class="mt-2 text-gray-600 flex-grow">
+                      {{item.description}}
+                  </p>
+                  <div class="mt-4">
+                      <div class="">
+                          <p class="text-sm font-medium text-gray-900">{{item.name}}</p>
+                          <p class="text-sm text-gray-500">{{item.category}}</p>
+                      </div>
+                  </div>
+                  <div class="mt-3 text-xs flex justify-between">
+                      <div> {{item.date_posted}}</div>
+                          <div class="text-white text-right">
+                              {% if member.roles == 'Teacher'%}
+                              <a href="{% url 'delete' item.id %}" data-item-username="{{ item.sUsername }}" data-item-id="{{ item.id }}" data-item-year="{{item.year}}" data-item-name="{{ item.name }}" 
+                              data-item-description="{{ item.description }}" data-item-category="{{item.category}}" data-item-department="{{ item.department }}"
+                              class="delete-data bg-black hover:cursor-pointer text-xs text-white rounded-lg p-2 transition-colors">
+                                  Delete
+                              </a>
+                              {% endif %}
+                              {% if item.sUsername == curr_username or member.roles == 'Teacher'%}
+                              <button data-item-image="{{item.files}}" data-item-username="{{ item.sUsername }}" data-item-id="{{ item.id }}" data-item-year="{{item.year}}" data-item-name="{{ item.name }}" 
+                                  data-item-description="{{ item.description }}" data-item-category="{{item.category}}" data-item-department="{{ item.department }}"
+                                  class="update-modal-button bg-black hover:cursor-pointer text-xs text-white rounded-lg p-2 transition-colors">
+                                  Update
+                              </button>
+                              {% endif %}
+                              <button 
 
-        buttons.forEach(button => {
-            button.addEventListener('click', () => {
-                const itemName = button.dataset.itemName;
-                const itemDescription = button.dataset.itemDescription;
-                const itemCategory = button.dataset.itemCategory;
-                const itemDepartment = button.dataset.itemDepartment;
-                const itemYear = button.dataset.itemYear
+                                  {% if item.files%}
 
+                                      {% for item in item.files%}
+                                  
+                                          data-item-image="{{item}}"
+                                      {%endfor%}
 
-                document.getElementById('modal-title').textContent = itemName+' ';
-                document.getElementById('modal-description').textContent = itemDescription;
-                document.getElementById('modal-category').textContent = itemCategory;
-                document.getElementById('modal-department').textContent = itemDepartment;
-                document.getElementById('modal-year').textContent = '('+itemYear+'-';
-                document.getElementById('modal-dept').textContent = itemDepartment+')';
+                                  {%endif%}
+                              
+                              
+                               data-item-id="{{ item.id }}" data-item-year="{{item.year}}" data-item-name="{{ item.name }}" 
+                                  data-item-description="{{ item.description }}" data-item-category="{{item.category}}" data-item-department="{{ item.department }}"
+                                  class="show-more-modal-button bg-black hover:cursor-pointer text-xs text-white rounded-lg p-2 transition-colors">
+                                  Show More
+                              </button>
+                          </div>
+                  </div>
+          </div>
+      {% endfor %}
 
-
-
-                document.getElementById('modal').showModal(); 
-            });
-        });
-    });
-</script>
 
 
 {% endblock %}

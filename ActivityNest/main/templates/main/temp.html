@@ -1,0 +1,129 @@
+{%extends "layout.html"%}
+
+
+{% block data%}
+
+{%block bar_title%}
+
+General {{category | capfirst }}
+
+{%endblock%}
+
+<script src="https://cdn.tailwindcss.com"></script>
+<div class="flex">
+
+    <dialog id="modal" class=" fixed inset-0 top-1/2 left-1/2  w-[400px] -translate-x-1/2 -translate-y-1/2 bg-black/50  backdrop-blur-sm  rounded-xl shadow-xl ">
+        <div class="bg-white p-6  rounded-lg shadow-lg w-full">
+            <div class="w-full overflow-hidden rounded-lg">
+                <img id="item-image" class="object-cover rounded-lg w-48 h-32 shadow-md">
+                <!--<img id="item-image" src="https://cdn.britannica.com/55/174255-050-526314B6/brown-Guernsey-cow.jpg" class="w-full h-48 object-cover rounded-lg">
+            -->
+            </div>
+             <!-- Event Title & Details -->
+        <div class=" items-center mt-4">
+            <h1 id="modal-title" class="text-2xl font-bold text-[#0A233A]"></h1>
+            <p id="modal-year" class="text-lg font-medium text-gray-600 inline"></p>
+            <p id="modal-dept" class="text-lg font-medium text-gray-600 inline"></p>
+        </div>
+            <!-- Event Description -->
+        <div class="mt-4 text-gray-700">
+            <div class="font-bold text-[#0A233A]">Description:</div>
+            <p id="modal-description" class="text-gray-700-sm leading-relaxed mt-1"></p>
+        </div>
+           <!-- Event Category -->
+        <div class="mt text-gray-700">
+            <div class="font-bold text-[#0A233A]">Category:</div>
+            <p id="modal-category" class="text-gray-700-sm leading-relaxed"></p>
+        </div>
+
+            <!-- Event Department -->
+        <div class="mt-4 text-gray-700">
+            <div class="font-bold text-[#0A233A]">Department:</div>
+            <p id="modal-department" class="text-gray-700-sm leading-relaxed"></p>
+        </div>
+
+            <p id="modal-description" class="text-gray-700 ml-2 text-lg font-medium"></p>
+            <p id="modal-category" class="text-gray-700 ml-2 text-lg font-medium"></p>
+            <p id="modal-department" class="text-gray-700 ml-2 text-lg font-medium"></p>
+            <div class="flex justify-end mt-6">
+            <button onclick="document.getElementById('modal').close() " class="bg-[#0A233A] text-white px-5 py-2 rounded-lg text-sm font-medium transition hover:bg-[#439EA9] shadow-md hover:shadow-lg">
+                Close
+            </button>
+        </div>
+        </div>
+    </dialog>
+
+    <div class="max-w-6xl mt-2 mx-2  w-full ">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 ">
+            {% for item in category_items %}
+            <div class="bg-white p-6 rounded-xl relative shadow-lg flex flex-col border border-gray-300 transition-transform hover:scale-[1.02]">
+                <h2 class="mt-2 text-2xl my-2  font-bold text-[#0A233A] transition-all hover:text-[#439EA9]">
+                    <button class="underline"> {{item.name}} </button> ({{item.year}} {{item.department}})
+                    </h2>
+                    <p class="mt-2 text-gray-600 flex-grow leading-relaxed text-lg">
+                        {{item.description}}
+                    </p>
+                    <div class="mt-4">
+                        
+                            <p class="text-md font-medium text-gray-900">{{item.name}}</p>
+                            <p class="text-md text-gray-500">{{item.category}}</p>
+                        
+                    </div>
+                    <div class="mt-4 text-xs flex justify-between items-center">
+                        <div class="text-gray-600"> {{item.date_posted}}</div>
+                            <div class="text-white text-right">
+                                {% if item.sUsername == curr_username%}
+                                <button data-item-image="{{item.files}}" data-item-username="{{ item.sUsername }}" data-item-id="{{ item.id }}" data-item-year="{{item.year}}" data-item-name="{{ item.name }}" 
+                                    data-item-description="{{ item.description }}" data-item-category="{{item.category}}" data-item-department="{{ item.department }}"
+                                    class="update modal-button bg-[#0A233A] hover:bg-[#439EA9] text-white text-md font-semibold rounded-lg px-4 py-2 transition-all">
+                                    Update
+                                </button>
+                                {% endif %}
+                                <button 
+                                    {% if item.files%}
+
+                                        {% for item in item.files%}
+                                            data-item-image="{{item}}"
+                                        {%endfor%}
+                                    
+                                    {%endif%}
+                                
+                                
+                                 data-item-id="{{ item.id }}" data-item-year="{{item.year}}" data-item-name="{{ item.name }}" 
+                                    data-item-description="{{ item.description }}" data-item-category="{{item.category}}" data-item-department="{{ item.department }}"
+                                    class="show-more-modal-button bg-[#0A233A] hover:bg-[#439EA9] text-white text-md font-semibold rounded-lg px-4 py-2 transition-all">
+                                    Show More
+                                </button>
+                            </div>
+                    </div>
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const showMoreButtons = document.querySelectorAll('.show-more-modal-button');
+
+        showMoreButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                document.getElementById('modal-title').textContent = button.dataset.itemName;
+                document.getElementById('modal-description').textContent = button.dataset.itemDescription;
+                document.getElementById('modal-category').textContent = button.dataset.itemCategory;
+                document.getElementById('modal-department').textContent = button.dataset.itemDepartment;
+                document.getElementById('modal-year').textContent = `(${button.dataset.itemYear}-`;
+                document.getElementById('modal-dept').textContent = `${button.dataset.itemDepartment})`;
+                document.getElementById('item-image').src = `${button.dataset.itemImage}`;
+
+                document.getElementById('modal').showModal(); 
+            });
+        });
+        
+    });
+</script>
+
+
+
+
+{% endblock %}

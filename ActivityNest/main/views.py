@@ -10,6 +10,7 @@ import cloudinary.uploader
 import gspread
 from google.oauth2.service_account import Credentials
 from django.conf import settings
+from django.contrib.auth.models import User
 
 scopes = [
     "https://www.googleapis.com/auth/spreadsheets"
@@ -43,16 +44,19 @@ def pie_chart_year(request, dept):
 
 
 def home(req):
-    all_items = Item.objects.all()
+    all_items = Item.objects.all().order_by('-id')
     form = UpdateListForm()
     username = req.user.username
     user = req.user
-    member = {}
+    word = "home"
+    
     if req.user.is_authenticated:
         member = get_object_or_404(Member, user=req.user)
+      
         print(member.roles)
-    
-    return render(req, 'index.html', {'all_items': all_items ,'chart_url': '/pie-chart/', 'curr_username' : username,  'form' : form , 'user' : user , 'member' : member } )
+        return render(req, 'index.html', {'all_items': all_items ,'chart_url': '/pie-chart/', 'curr_username' : username,  'form' : form , 'user' : user , 'member' : member, 'word' : word } )
+    else:
+        return render(req, 'index.html', {'all_items': all_items ,'chart_url': '/pie-chart/', 'curr_username' : username,  'form' : form , 'user' : user, 'word' : word } )
 
 def updt(request, item_id):
     item = get_object_or_404(Item, id=item_id)  
@@ -67,7 +71,7 @@ def updt(request, item_id):
             print(form.errors)
     
     else:
-        form = UpdateListForm(instance=item)  # Load existing data
+        form = UpdateListForm(instance=item)  
 
     return redirect('home')
 
@@ -85,38 +89,47 @@ dep = ['it', 'cse', 'cs', 'extc']
 def department(req, dept):
     if dept in dep:
         dept.upper()
+        word = "home"
         dept_items = Item.objects.filter(department__iexact=dept)
         if req.user.is_authenticated:
             member = get_object_or_404(Member, user=req.user)
-            return render(req, 'department.html' , { "dept" : dept, 'dept_items' :dept_items, 'chart_year_url': '/pie-chart-year/', 'member' : member} )
+            return render(req, 'department.html' , { "dept" : dept, 'dept_items' :dept_items, 'chart_year_url': '/pie-chart-year/', 'member' : member, 'word' : word } )
         else:
-            return render(req, 'department.html' , { "dept" : dept, 'dept_items' :dept_items, 'chart_year_url': '/pie-chart-year/'} )
+            return render(req, 'department.html' , { "dept" : dept, 'dept_items' :dept_items, 'chart_year_url': '/pie-chart-year/', 'word' : word} )
     else:
         return render(req, '404.html')
     
-def profile(req, username):
-    user = Item.objects.filter(sUsername__iexact=username)
-    if req.user.is_authenticated:
-        member = get_object_or_404(Member, user=req.user)
-        print(member.roles)
-    return render(req, 'profile.html', {'user_items': user, 'member' : member})
+def profile(request, username):
+    user = get_object_or_404(User, username=username)
+    user_mem = get_object_or_404(Member, user=user)
+    user_items = Item.objects.filter(sUsername__iexact=username)
+
+    return render(request, 'profile.html', {
+        'user_items': user_items,
+        'member': user_mem,
+        'username': username,
+        'user': user_mem,
+    })
 
 def category_item(req, dept, category):
     category_items = Item.objects.filter(category__iexact=category, department__iexact=dept)
     if req.user.is_authenticated:
         member = get_object_or_404(Member, user=req.user)
         print(member.roles)
+        return render(req, 'category_dept.html', {'category_items': category_items, 'dept' : dept, 'member' : member, 'category' : category})
+    else:
+        return render(req, 'category_dept.html', {'category_items': category_items, 'dept' : dept, 'category' : category})
     
-    return render(req, 'category_dept.html', {'category_items': category_items, 'dept' : dept, 'member' : member})
+    
 
 def category(req, category):
     category_items = Item.objects.filter(category__iexact=category)
     if req.user.is_authenticated:
         member = get_object_or_404(Member, user=req.user)
         print(member.roles)
-        return render(req, 'category.html', {'category_items': category_items, 'member' : member})
+        return render(req, 'category.html', {'category_items': category_items, 'member' : member, 'category' : category})
     else:
-        return render(req, 'category.html', {'category_items': category_items})
+        return render(req, 'category.html', {'category_items': category_items, 'category' : category})
     
     
     
