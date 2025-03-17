@@ -6,10 +6,8 @@ General {{category | capfirst }}
 {%endblock%}
 
 {% block data%}
-<div class="max-w-6xl mt-2 mx-2  w-full ">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-2 ">
-        
-
+<div class="max-w-6xl mt-2 mx-2  w-full">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 ">
 
 {% for item in category_items%}
           <div class="bg-white p-6 rounded-lg relative shadow-lg flex flex-col">
@@ -29,11 +27,11 @@ General {{category | capfirst }}
                       <div> {{item.date_posted}}</div>
                           <div class="text-white text-right">
                               {% if member.roles == 'Teacher'%}
-                              <a href="{% url 'delete' item.id %}" data-item-username="{{ item.sUsername }}" data-item-id="{{ item.id }}" data-item-year="{{item.year}}" data-item-name="{{ item.name }}" 
+                              <button href="{% url 'delete' item.id %}"onclick="return false;" data-item-username="{{ item.sUsername }}" data-item-id="{{ item.id }}" data-item-year="{{item.year}}" data-item-name="{{ item.name }}" 
                               data-item-description="{{ item.description }}" data-item-category="{{item.category}}" data-item-department="{{ item.department }}"
                               class="delete-data bg-black hover:cursor-pointer text-xs text-white rounded-lg p-2 transition-colors">
                                   Delete
-                              </a>
+                          </button>
                               {% endif %}
                               {% if item.sUsername == curr_username or member.roles == 'Teacher'%}
                               <button data-item-image="{{item.files}}" data-item-username="{{ item.sUsername }}" data-item-id="{{ item.id }}" data-item-year="{{item.year}}" data-item-name="{{ item.name }}" 

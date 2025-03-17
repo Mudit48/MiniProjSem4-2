@@ -362,7 +362,7 @@
         
       {%block chart%}
       {%endblock%}
-      <dialog id="modal1" class="fixed top-1/2 left-1/2 w-100 h-100 -translate-x-1/2 -translate-y-1/2 bg-black/50">
+      <dialog id="modal1" class="fixed inset-0 top-1/2 left-1/2 mt-1 w-400 -translate-x-1/2 -translate-y-1/2 bg-black/50  backdrop-blur-sm  rounded-xl shadow-xl">
           <div class="flex items-center justify-center bg-white p-6 h-full w-full rounded-lg shadow-lg w-96">
               <form id="form-id" method="POST">
                   <div class="">
@@ -371,11 +371,6 @@
                           <label id="label-username" class="" > Username : </label> <input readonly id="input-username">
                           <p id="item-username" class="">  </p>
                               {{form.as_p}}
-                          <label id="label-year" class="" > Year : </label> <input readonly id="input-year">
-                          <br
-                          <label id="label-category" class="" > Category : </label> <input readonly id="input-category">
-                          <br>
-                          <label id="label-dept" class="" > Department : </label> <input readonly id="input-dept">
                           
                           <div>
                           <button type="submit" class="bg-black text-white p-2 mt-2 rounded-lg"> Submit </button>
@@ -434,6 +429,7 @@
       {%block profile%}
 
       {%endblock%}
+
       {%block data%}
       
       {%endblock%}
@@ -463,9 +459,7 @@
               button.addEventListener('click', () => {
                   document.getElementById('input-username').value = button.dataset.itemUsername;
                   document.getElementById('modal-description').textContent = button.dataset.itemDescription;
-                  document.getElementById('input-category').value = button.dataset.itemCategory;
-                  document.getElementById('input-year').value = button.dataset.itemYear;
-                  document.getElementById('input-dept').value = button.dataset.itemDepartment;
+                  
                   document.getElementById('form-id').action = `/update/${button.dataset.itemId}/`;
                   document.getElementById('item-image').src = button.dataset.itemImage;
                   document.getElementById('modal1').showModal();
