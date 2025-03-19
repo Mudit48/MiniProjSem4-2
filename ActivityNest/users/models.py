@@ -25,6 +25,7 @@ class Member(models.Model):
     department = models.CharField(max_length=10, default="EXTC", choices=dept_choice)
     year = models.CharField(max_length=10, null=True, default="SE", choices=year_choice)
     roles = models.CharField(max_length=20 , default=RoleChoices.STUDENT,choices=RoleChoices.choices)
+    profile_picture = models.URLField(max_length=500, blank=True, null=True)  # Cloudinary image URL
 
 
     def __str__(self):

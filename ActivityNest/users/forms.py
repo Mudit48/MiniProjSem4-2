@@ -28,6 +28,8 @@ class MemberForm(forms.ModelForm):
         'class': 'w-52 my-2 bg-[#1c1c24] text-white rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-600 inline-block'
     }), label='')
 
+    profile_picture = forms.ImageField(required=False)  # Accepts images
+
     class Meta:
         model = Member
         fields = ['department'] 

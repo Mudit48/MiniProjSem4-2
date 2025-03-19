@@ -4,24 +4,31 @@ from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from .models import Member
 from .forms import MemberForm, LoginForm
+import cloudinary.uploader
 
 def register(req):
     if req.method == "POST":
-        form = MemberForm(req.POST)
+        form = MemberForm(req.POST,req.FILES)
         if form.is_valid():
             full_name = form.cleaned_data['full_name']
             username = form.cleaned_data['username']
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
             department = form.cleaned_data['department']
+            profile_picture = req.FILES.get('profile_picture')
 
             if User.objects.filter(username=username).exists():
                 messages.error(req, "This username is already taken.")
                 return render(req, 'register.html', {'form': form})
 
             user = User.objects.create_user( username=username, email=email, password=password)
+            # Upload profile picture to Cloudinary (if provided)
+            profile_picture_url = None
+            if profile_picture:
+                upload_result = cloudinary.uploader.upload(profile_picture)
+                profile_picture_url = upload_result.get('secure_url')
 
-            member = Member.objects.create(user=user, department=department, full_name = full_name)
+            member = Member.objects.create(user=user, department=department, profile_picture=profile_picture_url)
 
             messages.success(req, 'Registration successful! You can now log in.')
             return redirect('login')

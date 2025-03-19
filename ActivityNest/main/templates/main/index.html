@@ -43,19 +43,17 @@
                 <div class="mt-4 text-sm flex justify-between items-center">
                     <div class="text-gray-600"> {{item.date_posted}}</div>
                         <div class="text-white text-right">
-                            {% if member.roles == 'Teacher'%}
+                            {% if member.roles == "Teacher" and member.department == item.department %}
                               <a href="{% url 'delete' item.id %}" data-item-username="{{ item.sUsername }}" data-item-id="{{ item.id }}" data-item-year="{{item.year}}" data-item-name="{{ item.name }}" 
                               data-item-description="{{ item.description }}" data-item-category="{{item.category}}" data-item-department="{{ item.department }}"
                               class="delete-data mr-2 bg-black hover:cursor-pointer text-xs text-white rounded-lg p-2 transition-colors">
                                   Delete
                               </a>
                               {% endif %}
-                              {% if item.sUsername == curr_username or member.roles == 'Teacher'%}
-                              <button data-item-image="{{item.files}}" data-item-username="{{ item.sUsername }}" data-item-id="{{ item.id }}" data-item-year="{{item.year}}" data-item-name="{{ item.name }}" 
-                                  data-item-description="{{ item.description }}" data-item-category="{{item.category}}" data-item-department="{{ item.department }}"
-                                  class="update-modal-button bg-black hover:cursor-pointer text-xs text-white rounded-lg p-2 transition-colors">
+                              {% if item.sUsername == curr_username or member.roles == "Teacher" and member.department == item.department %}
+                              <a class="mr-2 bg-black hover:cursor-pointer text-xs text-white rounded-lg p-2 transition-colors" href="{% url 'update' item.id %}">
                                   Update
-                              </button>
+                              </a>
                               {% endif %}
                               <button 
 

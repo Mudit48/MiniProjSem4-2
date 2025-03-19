@@ -10,11 +10,11 @@ Profile of {{ username }}
 {%if user != None%}
     <div class="mt-2 ml-2 w-1/2 h-full bg-white p-6 rounded-lg relative shadow-lg flex flex-col">
         <div class="flex justify-center">
-            <img src="{{ profile_picture }}" alt="Profile Picture" class="w-24 h-24 rounded-full">
+            <img class="h-40 rounded-full" src="https://thumbs.dreamstime.com/b/businessman-icon-vector-male-avatar-profile-image-profile-businessman-icon-vector-male-avatar-profile-image-182095609.jpg" alt="">
         </div>
         <div class="mt-10 p-4">
             <h2 id="prof_name" class="text-xl font-semibold text-gray-900"></h2>
-            <label class="text-sm text-black">Username: </label> <input readonly value="@{{ username }}"></input>
+            <label class="text-sm text-black">Username: </label> <input readonly value="@{{ username }}">
             <p class="text-sm text-gray-600">{{ user.full_name }}</p>
             <p class="text-sm text-gray-600">{{ user.department }}</p>
             <p class="text-sm text-gray-600">{{ user.year}}</p>

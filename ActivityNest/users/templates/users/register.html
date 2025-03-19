@@ -47,7 +47,7 @@
             </div>
             {% endif %}
 
-            <form action="{% url 'register' %}" method="POST" class="space-y-5">
+            <form action="{% url 'register' %}" method="POST" class="space-y-5" enctype="multipart/form-data">
                 {% csrf_token %}
                 
                 <div class="text-gray-700 space-y-4">

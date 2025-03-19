@@ -362,32 +362,6 @@
         
       {%block chart%}
       {%endblock%}
-      <dialog id="modal1" class="fixed inset-0 top-1/2 left-1/2 mt-1 w-400 -translate-x-1/2 -translate-y-1/2 bg-black/50  backdrop-blur-sm  rounded-xl shadow-xl">
-          <div class="flex items-center justify-center bg-white p-6 h-full w-full rounded-lg shadow-lg w-96">
-              <form id="form-id" method="POST">
-                  <div class="">
-                  {% csrf_token %}
-                      <div class="">
-                          <label id="label-username" class="" > Username : </label> <input readonly id="input-username">
-                          <p id="item-username" class="">  </p>
-                              {{form.as_p}}
-                          
-                          <div>
-                          <button type="submit" class="bg-black text-white p-2 mt-2 rounded-lg"> Submit </button>
-                          </div>
-                      </div>
-    
-                      <div class="text-right">
-                          <button onclick="document.getElementById('modal1').close(); return false;" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                              Close
-                          </button>
-                      </div>
-    
-                  </div>
-              </form>
-              
-          </div>
-      </dialog>
     
       <dialog id="modal" class=" fixed inset-0 top-1/2 left-1/2  w-[400px] -translate-x-1/2 -translate-y-1/2 bg-black/50  backdrop-blur-sm  rounded-xl shadow-xl ">
         <div class="bg-white p-6  rounded-lg shadow-lg w-full">
@@ -450,20 +424,6 @@
                   document.getElementById('item-image').src = `${button.dataset.itemImage}`;
     
                   document.getElementById('modal').showModal(); 
-              });
-          });
-    
-          const updateButtons = document.querySelectorAll('.update-modal-button');
-    
-          updateButtons.forEach(button => {
-              button.addEventListener('click', () => {
-                  document.getElementById('input-username').value = button.dataset.itemUsername;
-                  document.getElementById('modal-description').textContent = button.dataset.itemDescription;
-                  
-                  document.getElementById('form-id').action = `/update/${button.dataset.itemId}/`;
-                  document.getElementById('item-image').src = button.dataset.itemImage;
-                  document.getElementById('modal1').showModal();
-                  
               });
           });
       });
