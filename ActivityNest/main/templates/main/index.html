@@ -8,13 +8,7 @@
     Welcome to Activity Nest!
 {% endblock %}
 
-{% block charturl%}
-{{chart_url}}
-{%endblock%}
 
-{%block items%}
-{{all_items}}
-{%endblock%}
 {%block chart%}
 <div class="h-120 mt-2 text-center pl-3 shadow-lg">
     <img src="{% url 'pie_chart'  %}" class="object-cover " alt="Department Pie Chart" >
@@ -23,60 +17,6 @@
     </div>
 </div>
 {%endblock%}
-{%block data%}
-<div class="max-w-6xl mt-2 mx-2  w-full ">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 ">
-        {% for item in all_items %}
-        <div class="bg-white p-6 rounded-xl relative shadow-lg flex flex-col border border-gray-300 transition-transform hover:scale-[1.02]">
-                <h2 class="mt-2 text-2xl my-2 font-bold text-[#0A233A] transition-all hover:text-[#439EA9]">
-                    <a href="{% url 'profile' item.sUsername %}" class="underline  "> {{item.name}} </a> ({{item.year}} {{item.department}})
-                </h2>
-                <p class="mt-2 text-gray-700 flex-grow leading-relaxed text-lg">
-                    {{item.description}}
-                </p>
-                <div class="mt-4">
-                    <div class="">
-                        <p class="text-md font-medium text-gray-900">{{item.name}}</p>
-                        <p class="text-md text-gray-500">{{item.category}}</p>
-                    </div>
-                </div>
-                <div class="mt-4 text-sm flex justify-between items-center">
-                    <div class="text-gray-600"> {{item.date_posted}}</div>
-                        <div class="text-white text-right">
-                            {% if member.roles == "Teacher" and member.department == item.department %}
-                              <a href="{% url 'delete' item.id %}" data-item-username="{{ item.sUsername }}" data-item-id="{{ item.id }}" data-item-year="{{item.year}}" data-item-name="{{ item.name }}" 
-                              data-item-description="{{ item.description }}" data-item-category="{{item.category}}" data-item-department="{{ item.department }}"
-                              class="delete-data mr-2 bg-black hover:cursor-pointer text-xs text-white rounded-lg p-2 transition-colors">
-                                  Delete
-                              </a>
-                              {% endif %}
-                              {% if item.sUsername == curr_username or member.roles == "Teacher" and member.department == item.department %}
-                              <a class="mr-2 bg-black hover:cursor-pointer text-xs text-white rounded-lg p-2 transition-colors" href="{% url 'update' item.id %}">
-                                  Update
-                              </a>
-                              {% endif %}
-                              <button 
 
-                                  {% if item.files%}
 
-                                      {% for item in item.files%}
-                                  
-                                          data-item-image="{{item}}"
-                                      {%endfor%}
-
-                                  {%endif%}
-                              
-                              
-                               data-item-id="{{ item.id }}" data-item-year="{{item.year}}" data-item-name="{{ item.name }}" 
-                                  data-item-description="{{ item.description }}" data-item-category="{{item.category}}" data-item-department="{{ item.department }}"
-                                  class="show-more-modal-button bg-black hover:cursor-pointer text-xs text-white rounded-lg p-2 transition-colors">
-                                  Show More
-                              </button>
-                        </div>
-                </div>
-        </div>
-    {% endfor %}
-    </div>
-</div>
-{%endblock%}
 

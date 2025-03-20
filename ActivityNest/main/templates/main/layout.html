@@ -7,7 +7,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
- 
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+    *{
+      font-family: "Poppins", sans-serif;
+    }
+  </style>
+
+  
+
   <script src="https://cdn.tailwindcss.com"></script>
 
   <script defer>
@@ -150,7 +158,7 @@
   </title>
   
 </head>
-<body class="bg-gradient-to-br from-cyan-100 to-blue-50 min-h-45 ">
+<body class="h-full bg-[#A8DADC] mb-10">
   <div class="min-h-full">
     <nav class="bg-[#0A233A] h-18 shadow-md">
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -348,7 +356,7 @@
     <header class="bg-white shadow-sm ">
         <div class="mx-auto max-w-8xl py-3 sm:px-6 flex ">
     
-          <h1 class="font-bold text-2xl inset-x-0 text-center mx-auto font-[Merriweather]">
+          <h1 class="font-bold text-2xl inset-x-0 text-center mx-auto ">
             {%block bar_title%}
             default
              {%endblock%}
@@ -358,10 +366,68 @@
       
       
       
-    <main class="flex">
+    <main class="flex bg-[#A8DADC]">
         
       {%block chart%}
       {%endblock%}
+      <dialog id="modal1" class="fixed inset-0 top-1/2 left-1/2 mt-1 w-400 -translate-x-1/2 -translate-y-1/2 bg-black/50  backdrop-blur-sm  rounded-xl shadow-xl">
+        <div class="flex items-center justify-center bg-white p-6 h-full w-full rounded-lg shadow-lg w-96">
+            <form id="form-id" method="POST">
+                {% csrf_token %}
+                
+                <div>
+                    <label for="input-username" class="block text-sm font-medium text-gray-700">Username:</label>
+                    <input type="text" id="input-username" readonly class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none text-lg">
+                    <p id="item-username" class="text-sm text-gray-500" value="{{item.sUsername}}"></p>
+                </div>
+                
+                <div>
+                    <label for="id_name" class="block text-sm font-medium text-gray-700">Name of student:</label>
+                    <input type="text" name="name" id="id_name" value="{{item.name}}" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:outline-none text-lg">
+                </div>
+                
+                <div>
+                    <label for="id_department" class="block text-sm font-medium text-gray-700">Department:</label>
+                    <input type="text" name="department" id="id_department" value="{{item.department | safe}}" readonly class="w-full p-3 bg-gray-200 border border-gray-300 rounded-lg focus:outline-none text-lg">
+                </div>
+                
+                <div>
+                    <label for="id_category" class="block text-sm font-medium text-gray-700">Category:</label>
+                    <select name="category" id="id_category" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:outline-none text-lg">
+                        {% for value, label in form.category.field.choices %}
+                            <option value="{{ value }}">{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div>
+                    <label for="id_year" class="block text-sm font-medium text-gray-700">Year of Study:</label>
+                    <select name="year" id="id_year" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:outline-none text-lg">
+                        {% for value, label in form.year.field.choices %}
+                            <option value="{{ value }}">{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div>
+                    <label for="id_doe" class="block text-sm font-medium text-gray-700">Date of event:</label>
+                    <input type="date" name="doe" id="id_doe" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:outline-none text-lg">
+                </div>
+                
+                <div>
+                    <label for="id_description" class="block text-sm font-medium text-gray-700">Event Description:</label>
+                    <textarea name="description" id="id_description" rows="2" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:outline-none text-lg resize-none"></textarea>
+                </div>
+                
+                <div class="text-right mt-4">
+                    <button type="submit" class="bg-black text-white p-2 rounded-lg">Submit</button>
+                    <button onclick="document.getElementById('modal1').close(); return false;" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Close</button>
+                </div>
+            </form>
+        </div>
+    </dialog>
+    
+    
     
       <dialog id="modal" class=" fixed inset-0 top-1/2 left-1/2  w-[400px] -translate-x-1/2 -translate-y-1/2 bg-black/50  backdrop-blur-sm  rounded-xl shadow-xl ">
         <div class="bg-white p-6  rounded-lg shadow-lg w-full">
@@ -404,9 +470,63 @@
 
       {%endblock%}
 
-      {%block data%}
       
-      {%endblock%}
+<div class="max-w-6xl mt-2 mx-2  w-full mb-10">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 ">
+        {% for item in all_items %}
+        <div class="bg-gray-100 p-6 rounded-xl relative shadow-lg flex flex-col border border-gray-300 transition-transform hover:scale-[1.02]">
+                <h2 class="mt-2 text-2xl my-2 font-bold text-[#0A233A] transition-all hover:text-[#439EA9]">
+                    <a href="{% url 'profile' item.sUsername %}" class="underline  "> {{item.name}} </a> ({{item.year}} {{item.department}})
+                </h2>
+                <p class="mt-2 text-gray-700 flex-grow leading-relaxed text-lg">
+                    {{item.description}}
+                </p>
+                <div class="mt-4">
+                    <div class="">
+                        <p class="text-md font-medium text-gray-900">{{item.name}}</p>
+                        <p class="text-md text-gray-500">{{item.category}}</p>
+                    </div>
+                </div>
+                <div class="mt-4 text-sm flex justify-between items-center">
+                    <div class="text-gray-600"> {{item.date_posted}}</div>
+                        <div class="text-white text-right">
+                          {% if member.roles == "Teacher" and member.department == item.department %}
+                              <a href="{% url 'delete' item.id %}" data-item-username="{{ item.sUsername }}" data-item-id="{{ item.id }}" data-item-year="{{item.year}}" data-item-name="{{ item.name }}" 
+                              data-item-description="{{ item.description }}" data-item-category="{{item.category}}" data-item-department="{{ item.department }}"
+                              class="delete-data mr-2 bg-black hover:cursor-pointer text-xs text-white rounded-lg p-2 transition-colors">
+                                  Delete
+                              </a>
+                              {% endif %}
+                              {% if item.sUsername == curr_username or member.roles == 'Teacher' and member.department == item.department %}
+                              <button data-item-image="{{item.files}}" data-item-username="{{ item.sUsername }}" data-item-id="{{ item.id }}" data-item-year="{{item.year}}" data-item-name="{{ item.name }}" 
+                                  data-item-description="{{ item.description }}" data-item-category="{{item.category}}" data-item-department="{{ item.department }}" data-item-doe="{{item.date_posted}}"
+                                  class="update-modal-button bg-black hover:cursor-pointer text-xs text-white rounded-lg p-2 transition-colors">
+                                  Update
+                              </button>
+                              {% endif %}
+                              <button 
+
+                                  {% if item.files%}
+
+                                      {% for item in item.files%}
+                                  
+                                          data-item-image="{{item}}"
+                                      {%endfor%}
+
+                                  {%endif%}
+                              
+                              
+                               data-item-id="{{ item.id }}" data-item-year="{{item.year}}" data-item-name="{{ item.name }}" 
+                                  data-item-description="{{ item.description }}" data-item-category="{{item.category}}" data-item-department="{{ item.department }}"
+                                  class="show-more-modal-button bg-black hover:cursor-pointer text-xs text-white rounded-lg p-2 transition-colors">
+                                  Show More
+                              </button>
+                        </div>
+                </div>
+        </div>
+    {% endfor %}
+    </div>
+</div>
     </div>
     
     <script>
@@ -424,6 +544,21 @@
                   document.getElementById('item-image').src = `${button.dataset.itemImage}`;
     
                   document.getElementById('modal').showModal(); 
+              });
+          });
+    
+          const updateButtons = document.querySelectorAll('.update-modal-button');
+    
+          updateButtons.forEach(button => {
+              button.addEventListener('click', () => {
+                  document.getElementById('input-username').value = button.dataset.itemUsername;
+                  document.getElementById('id_description').textContent = button.dataset.itemDescription;
+                  document.getElementById("id_department").value = button.dataset.itemDepartment
+                  document.getElementById("id_name").value = button.dataset.itemName
+                  document.getElementById('form-id').action = `/update/${button.dataset.itemId}/`;
+                  document.getElementById('item-image').src = button.dataset.itemImage;
+                  document.getElementById('modal1').showModal();
+                  
               });
           });
       });

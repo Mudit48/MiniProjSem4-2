@@ -58,47 +58,21 @@ def home(req):
         return render(req, 'index.html', {'all_items': all_items ,'chart_url': '/pie-chart/', 'curr_username' : username,  'form' : form , 'user' : user, 'word' : word } )
 
 def updt(request, item_id):
-    item = get_object_or_404(Item, id=item_id)  # Fetch the item
+    item = get_object_or_404(Item, id=item_id)  
 
     if request.method == "POST":
-        form = UpdateListForm(request.POST, request.FILES, instance=item)
-
+        form = UpdateListForm(request.POST, instance=item)  
         if form.is_valid():
-            # Delete old files from Cloudinary
-            if item.files:
-                for file_url in item.files:
-                    public_id = file_url.split("/")[-1].split(".")[0]  # Extract public_id
-                    cloudinary.uploader.destroy(public_id)  # Delete from Cloudinary
-
-            # Clear old files from database
-            item.files.clear()
-
-            # Upload new files
-            new_files = request.FILES.getlist("files")  # Get new files
-            uploaded_file_urls = []  # Store new file URLs
-
-            for file in new_files:
-                upload_result = cloudinary.uploader.upload(file)
-                uploaded_file_urls.append(upload_result["secure_url"])  # Append new URLs
-
-            # Update the item fields manually
-            item.files = uploaded_file_urls
-            item.category = form.cleaned_data["category"]
-            item.description = form.cleaned_data["description"]
-            item.year = form.cleaned_data["year"]
-            item.doe = str(form.cleaned_data["doe"])
-            item.name = form.cleaned_data["name"]
-
-            item.save()  # Save to DB
-
-            return redirect("home")  # Redirect after update
+            print(form)
+            form.save()  
+            return redirect('home') 
         else:
-            print(form.errors)  # Debugging: Print form errors
-
+            print(form.errors)
+    
     else:
-        form = UpdateListForm(instance=item)
+        form = UpdateListForm(instance=item)  
 
-    return render(request, "update_item.html", {"form": form})
+    return redirect('home')
 
 def deleteButton(req, id):
     cell = sheet.find(str(id), in_column=1)
@@ -118,9 +92,9 @@ def department(req, dept):
         dept_items = Item.objects.filter(department__iexact=dept)
         if req.user.is_authenticated:
             member = get_object_or_404(Member, user=req.user)
-            return render(req, 'department.html' , { "dept" : dept, 'dept_items' :dept_items, 'chart_year_url': '/pie-chart-year/', 'member' : member, 'word' : word } )
+            return render(req, 'department.html' , { "dept" : dept, 'all_items' :dept_items, 'chart_year_url': '/pie-chart-year/', 'member' : member, 'word' : word } )
         else:
-            return render(req, 'department.html' , { "dept" : dept, 'dept_items' :dept_items, 'chart_year_url': '/pie-chart-year/', 'word' : word} )
+            return render(req, 'department.html' , { "dept" : dept, 'all_items' :dept_items, 'chart_year_url': '/pie-chart-year/', 'word' : word} )
     else:
         return render(req, '404.html')
     
@@ -148,9 +122,9 @@ def category_item(req, dept, category):
     if req.user.is_authenticated:
         member = get_object_or_404(Member, user=req.user)
         print(member.roles)
-        return render(req, 'category_dept.html', {'category_items': category_items, 'dept' : dept, 'member' : member, 'category' : category})
+        return render(req, 'category_dept.html', {'all_items': category_items, 'dept' : dept, 'member' : member, 'category' : category})
     else:
-        return render(req, 'category_dept.html', {'category_items': category_items, 'dept' : dept, 'category' : category})
+        return render(req, 'category_dept.html', {'all_items': category_items, 'dept' : dept, 'category' : category})
     
     
 
@@ -159,9 +133,9 @@ def category(req, category):
     if req.user.is_authenticated:
         member = get_object_or_404(Member, user=req.user)
         print(member.roles)
-        return render(req, 'category.html', {'category_items': category_items, 'member' : member, 'category' : category})
+        return render(req, 'category.html', {'all_items': category_items, 'member' : member, 'category' : category})
     else:
-        return render(req, 'category.html', {'category_items': category_items, 'category' : category})
+        return render(req, 'category.html', {'all_items': category_items, 'category' : category})
     
     
     
@@ -184,6 +158,7 @@ def list_item(req):
 
             item = form.save(commit=False)
             files = req.FILES.getlist("files")  # Get multiple files from form
+            print(len(files))
             uploaded_urls = []  # Store uploaded file URLs
 
             for file in files:
@@ -204,5 +179,4 @@ def list_item(req):
     else:   
         form = ListForm(user=req.user)
         return render(req, 'list_item.html', {'form' : form, 'department' : department})
-    
     
