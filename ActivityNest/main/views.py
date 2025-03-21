@@ -111,7 +111,7 @@ def profile(request, username):
   
 
     return render(request, 'profile.html', {
-        'user_items': user_items,
+        'all_items': user_items,
         'member': user_mem,
         'username': username,
         'user': user_mem,
