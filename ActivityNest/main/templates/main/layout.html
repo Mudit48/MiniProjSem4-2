@@ -238,7 +238,7 @@
                   </div>
                   
                 <div id="departments-dropdown" class="hidden z-50 absolute left-1/4  mt-9   -translate-x-1/2 px-4 ">
-                  <div class="w-64 max-w-md flex-auto overflow-hidden rounded-3xl bg-[#E0F7FA] text-sm/6 ring-1 shadow-lg ring-gray-900/5">
+                  <div class="w-64 max-w-md flex-auto overflow-hidden rounded-3xl bg-[#A8DADC] text-sm/6 ring-1 shadow-lg ring-gray-900/5">
                     <div class="p-4">
                       <div class="group relative flex gap-x-6 rounded-lg p-4 hover:[#B2EBF2]">
                         <div class="mt-1 flex size-11 flex-none items-center justify-center rounded-lg bg-[#B2EBF2] group-hover:bg-white">
@@ -370,6 +370,8 @@
         
       {%block chart%}
       {%endblock%}
+
+      {%block data%}
       <dialog id="modal1" class="fixed inset-0 top-1/2 left-1/2 mt-1 w-400 -translate-x-1/2 -translate-y-1/2 bg-black/50  backdrop-blur-sm  rounded-xl shadow-xl">
         <div class="flex items-center justify-center bg-white p-6 h-full w-full rounded-lg shadow-lg w-96">
             <form id="form-id" method="POST">
@@ -527,8 +529,9 @@
     {% endfor %}
     </div>
 </div>
+
     </div>
-    
+    {%endblock%}
     <script>
       document.addEventListener("DOMContentLoaded", function () {
           const showMoreButtons = document.querySelectorAll('.show-more-modal-button');

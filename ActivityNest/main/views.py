@@ -10,6 +10,7 @@ import cloudinary.uploader
 import gspread
 from google.oauth2.service_account import Credentials
 from django.conf import settings
+from django.contrib import messages
 
 scopes = [
     "https://www.googleapis.com/auth/spreadsheets"
@@ -100,23 +101,44 @@ def department(req, dept):
     
 from django.contrib.auth.models import User
 def profile(request, username):
+
+
     user_items = Item.objects.filter(sUsername__iexact=username)
 
-    try:
-        user = get_object_or_404(User, username=username)
-        user_mem = get_object_or_404(Member, user=user)
-    except:
-        user_mem = None
     
-  
+    try:
+        userR = get_object_or_404(User, username=username)
+        user_mem = get_object_or_404(Member, user=userR)
+    except:
+        userR=None
 
-    return render(request, 'profile.html', {
+    curr_member = get_object_or_404(Member, user=request.user)
+    if request.user.is_authenticated and userR != None:
+        
+
+        return render(request, 'profile.html', {
         'all_items': user_items,
-        'member': user_mem,
+        'member': curr_member,
         'username': username,
-        'user': user_mem,
+        'user': request.user,
+        'prof_user' : userR,
+        'profile' : user_mem,
+        
     })
 
+    else:
+        return render(request, 'profile.html', {
+        'all_items': user_items,
+        'member': curr_member,
+        'username': username,
+        'user': request.user,
+        'prof_user' : userR,
+        
+    })
+
+
+
+    
 def category_item(req, dept, category):
     category_items = Item.objects.filter(category__iexact=category, department__iexact=dept)
     if req.user.is_authenticated:
@@ -144,11 +166,10 @@ def category(req, category):
 def list_item(req):
     form = ListForm()
     department = req.user.member.department
-    
+
     if req.method == 'POST':
         form = ListForm(req.POST, req.FILES, user=req.user)
         if form.is_valid():
-            
             name = form.cleaned_data["name"]
             username = form.cleaned_data["sUsername"]
             category = form.cleaned_data["category"]
@@ -158,25 +179,42 @@ def list_item(req):
 
             item = form.save(commit=False)
             files = req.FILES.getlist("files")  # Get multiple files from form
-            print(len(files))
             uploaded_urls = []  # Store uploaded file URLs
 
+            allowed_extensions = ["jpg", "jpeg", "png", "gif", "webp"]
+            max_file_size = 2 * 1024 * 1024  # 2MB
+
             for file in files:
-                upload_result = cloudinary.uploader.upload(file,resource_type="auto")  # Upload to Cloudinary
+                if not file.content_type.startswith("image"):  # Check if it's an image
+                    messages.error(req, "Only image files are allowed!")
+                    return redirect('list_item')
+
+                if file.size > max_file_size:  # Check file size
+                    messages.error(req, "Each file must be less than 2MB!")
+                    return redirect('list_item')
+
+                file_extension = file.name.split('.')[-1].lower()
+                if file_extension not in allowed_extensions:  # Check file extension
+                    messages.error(req, "Invalid file type! Allowed: JPG, PNG, GIF, WEBP.")
+                    return redirect('list_item')
+
+                upload_result = cloudinary.uploader.upload(file, resource_type="image")  # Upload to Cloudinary
                 uploaded_urls.append(upload_result["secure_url"])  # Store URL
 
-            item.files=uploaded_urls
+            item.files = uploaded_urls
             item.department = department
             item.save()
             item.refresh_from_db()
             id = item.id
-            sheet.append_row([id,name,username,department,category,description,year,doe])
+            sheet.append_row([id, name, username, department, category, description, year, doe])
+            
+            messages.success(req, "Item successfully added!")
             return redirect('home')
+
         else:
-            return HttpResponse("Invalid form")
-    
+            messages.error(req, "Invalid form submission!")
+            return redirect('list_item')
 
     else:   
         form = ListForm(user=req.user)
-        return render(req, 'list_item.html', {'form' : form, 'department' : department})
-    
+        return render(req, 'list_item.html', {'form': form, 'department': department})
