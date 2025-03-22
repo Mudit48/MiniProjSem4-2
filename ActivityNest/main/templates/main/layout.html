@@ -506,11 +506,9 @@
                               </a>
                               {% endif %}
                               {% if item.sUsername == curr_username or member.roles == 'Teacher' and member.department == item.department %}
-                              <button data-item-image="{{item.files}}" data-item-username="{{ item.sUsername }}" data-item-id="{{ item.id }}" data-item-year="{{item.year}}" data-item-name="{{ item.name }}" 
-                                  data-item-description="{{ item.description }}" data-item-category="{{item.category}}" data-item-department="{{ item.department }}" data-item-doe="{{item.date_posted}}"
-                                  class="update-modal-button bg-black hover:cursor-pointer text-xs text-white rounded-lg p-2 transition-colors">
-                                  Update
-                              </button>
+                              <a class="mr-2 bg-black hover:cursor-pointer text-xs text-white rounded-lg p-2 transition-colors" href="{% url 'update' item.id %}">
+                                Update
+                            </a>
                               {% endif %}
                               <button 
 
