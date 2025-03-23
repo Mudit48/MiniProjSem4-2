@@ -32,4 +32,4 @@ class Member(models.Model):
         return self.user.email
     
 
-    
+

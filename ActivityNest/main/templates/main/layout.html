@@ -481,6 +481,16 @@
       
 <div class="max-w-6xl mt-2 mx-2  w-full mb-10">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-3 ">
+      {% if messages %}
+      <div id="toast-container" class="fixed top-5 z-50 space-y-4">
+      {% for message in messages %}
+      <div class="bg-red-500 text-white my-4 px-4 py-3 rounded-lg shadow-lg">
+        <span>{{ message }}</span>
+        <button onclick="this.parentElement.remove()" class="ml-2 text-lg">&times;</button>
+      </div>
+      {% endfor %}
+      </div>
+      {% endif %}
         {% for item in all_items %}
         <div class="bg-gray-100 p-6 rounded-xl relative shadow-lg flex flex-col border border-gray-300 transition-transform hover:scale-[1.02]">
                 <h2 class="mt-2 text-2xl my-2 font-bold text-[#0A233A] transition-all hover:text-[#439EA9]">
@@ -506,11 +516,9 @@
                               </a>
                               {% endif %}
                               {% if item.sUsername == curr_username or member.roles == 'Teacher' and member.department == item.department %}
-                              <button data-item-image="{{item.files}}" data-item-username="{{ item.sUsername }}" data-item-id="{{ item.id }}" data-item-year="{{item.year}}" data-item-name="{{ item.name }}" 
-                                  data-item-description="{{ item.description }}" data-item-category="{{item.category}}" data-item-department="{{ item.department }}" data-item-doe="{{item.date_posted}}"
-                                  class="update-modal-button bg-black hover:cursor-pointer text-xs text-white rounded-lg p-2 transition-colors">
-                                  Update
-                              </button>
+                              <a class="mr-2 bg-black hover:cursor-pointer text-xs text-white rounded-lg p-2 transition-colors" href="{% url 'update' item.id %}">
+                                Update
+                            </a>
                               {% endif %}
                               <button 
 
@@ -538,6 +546,11 @@
 
     </div>
     {%endblock%}
+    <script>
+      setTimeout(() => {
+          document.getElementById('toast-container').innerHTML = "";
+      }, 5000);
+      </script>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
           const showMoreButtons = document.querySelectorAll('.show-more-modal-button');

@@ -15,6 +15,7 @@ year_choice = {
     "BE" : "BE",
 }
 
+
 class Item(models.Model):
     sUsername = models.CharField(max_length=100, null=True)
     name = models.CharField(max_length=100)
@@ -29,3 +30,9 @@ class Item(models.Model):
     def __str__(self):
         return self.name
 
+class Attend(models.Model):
+    roll_no = models.IntegerField(max_length=2, null=False)
+    name = models.CharField(max_length=100, null=False)
+    mark = models.CharField(max_length=1, null=False, default="P")
+    roll_image = models.URLField(null=False)
+    roll_date = models.DateField(null=False)

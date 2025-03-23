@@ -1,5 +1,5 @@
 from django import forms
-from .models import Item
+from .models import Item, Attend
 from .models import category_items, year_choice
 from users.models import Member
 
@@ -121,3 +121,9 @@ class UpdateListForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         if item:
             self.fields['department'].initial = item.department  # Keep department readonly
+
+
+class AttendForm(forms.ModelForm):
+    class Meta:
+        model = Attend
+        fields = ["roll_date"]
