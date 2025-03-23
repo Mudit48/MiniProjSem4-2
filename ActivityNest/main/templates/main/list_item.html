@@ -2,7 +2,16 @@
 
 {%block data%}
     <div class="bg-[#A8DADC] min-h-screen flex items-center justify-center p-6">
-
+        {% if messages %}
+      <div id="toast-container" class="fixed top-5 z-50 space-y-4">
+      {% for message in messages %}
+      <div class="bg-red-500 text-white my-4 px-4 py-3 rounded-lg shadow-lg">
+        <span>{{ message }}</span>
+        <button onclick="this.parentElement.remove()" class="ml-2 text-lg">&times;</button>
+      </div>
+      {% endfor %}
+      </div>
+      {% endif %}
     <div class="w-full max-w-7xl bg-white text-gray-900 p-2 rounded-3xl shadow-2xl fade-in">
 
         <form action="{% url 'list_item' %}" method="post" enctype="multipart/form-data" class="space-y-6">
@@ -58,3 +67,8 @@
     </div>
 </div>
 {%endblock%}
+<script>
+    setTimeout(() => {
+        document.getElementById('toast-container').innerHTML = "";
+    }, 5000);
+    </script>
