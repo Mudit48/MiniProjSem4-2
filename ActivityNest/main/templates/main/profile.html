@@ -19,6 +19,14 @@ Profile of {{ username }}
             <p class="text-sm text-gray-600">{{ profile.department }}</p>
             <p class="text-sm text-gray-600">{{ profile.year}}</p>
         </div>
+        {%if username == user.username or member.roles == 'Teacher'%}
+        <div>
+            <a href="{% url 'prof_attend' username%}">
+            see attendance
+            </a>
+        </div>
+        {%endif%}
+       
     </div>
 {% endif %}
 {% endblock %}

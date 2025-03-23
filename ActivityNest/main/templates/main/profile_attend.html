@@ -1,0 +1,66 @@
+{%extends "layout.html"%}
+
+{%block bar_title%}
+attendance of {{ username }}
+{%endblock%}
+
+{% block profile %}
+
+    <div class="mt-2 ml-2 w-1/2 h-full bg-white p-6 rounded-lg relative shadow-lg flex flex-col">
+        <div class="flex justify-center">
+            <img class="h-40 rounded-full" src="{{profile.profile_picture}}" alt="">
+        </div>
+        <div class="mt-10 p-4">
+            <h2 id="prof_name" class="text-xl font-semibold text-gray-900"></h2>
+            <label class="text-sm text-black">Username: </label> <input readonly value="@{{ username }}">
+            <p class="text-sm text-gray-600">{{ profile.full_name }}</p>
+            <p class="text-sm text-gray-600">{{ profile.department }}</p>
+            <p class="text-sm text-gray-600">{{ profile.year}}</p>
+        </div>
+        
+        <div>
+            <img src="data:image/png;base64,{{ chart }}">
+        </div>
+        <div class="mt-10 p-4">
+            <p>Your total attendance: {{total}}<p>
+            <p>total lectures: {{total_all}}<p>
+            <p>Your percent attendance: {{calc}}<p>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block profile_attend%}
+
+<div class="max-w-6xl mt-2 mx-2  w-full mb-10">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 ">
+
+        <div class="bg-gray-100 p-6 rounded-xl relative shadow-lg flex flex-col border border-gray-300 transition-transform hover:scale-[1.02]">
+                <h2 class="text-center"> Math </h2>
+                <p class="mt-2 text-gray-700 flex-grow leading-relaxed text-lg">
+                </p>
+                <div class="mt-4">
+                    <div class="">
+                        <p class="text-md text-gray-500">{{item.category}}</p>
+                        <p class="text-md text-gray-500">{{item.category}}</p>
+                    </div>
+                </div>
+                <div class="mt-4 text-sm flex justify-between items-center">
+                  <div class="">
+                    <div class="text-gray-600"> {{item.date_posted}}</div>
+                    <div class="text-gray-600"> {{item.teacher}}</div>
+                  </div>
+                        <div class="text-white text-right">
+                              
+                        </div>
+                </div>
+        </div>
+    </div>
+</div>
+
+{%endblock%}
+
+
+
+

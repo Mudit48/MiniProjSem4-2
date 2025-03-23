@@ -122,8 +122,23 @@ class UpdateListForm(forms.ModelForm):
         if item:
             self.fields['department'].initial = item.department  # Keep department readonly
 
+subject_choice = {
+    'coa': 'Computer Organization and Architecture',
+    'math': 'Engineering Mathematics - 4',
+    'cn': 'Computer Networking',
+    'os': 'Operating Systems',
+    'at': 'Automata Theory'
+}
 
 class AttendForm(forms.ModelForm):
+    subject = forms.ChoiceField(
+        label="subject",
+        choices=subject_choice,  # Replace with your choices
+        widget=forms.Select(attrs={
+            'class': 'w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:outline-none text-lg'
+        })
+    )
     class Meta:
         model = Attend
         fields = ["roll_date"]
+

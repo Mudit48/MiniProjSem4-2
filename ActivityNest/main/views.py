@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .forms import ListForm, UpdateListForm, AttendForm
-from .models import Item
+from .models import Item, Attend
 from users.models import Member 
 from .charts import generate_pie_chart
 from .chartyear import generate_pie_chart_year
@@ -16,6 +16,11 @@ import httpx
 import base64
 import ast
 from django.contrib.auth.models import User
+import matplotlib.pyplot as plt
+import io
+import urllib
+import base64
+from django.shortcuts import render
 
 
 
@@ -31,7 +36,8 @@ sheet_id = "1p978CHlDRzW3NiVIZYKPMjj8vfTh55AeEgqAf6lFHl0"
 workbook = client.open_by_key(sheet_id)
 
 sheet = workbook.worksheet("Sheet1")
-math = workbook.worksheet("math")
+
+
 
 def pie_chart(request):
     buffer = generate_pie_chart()
@@ -67,7 +73,7 @@ def home(req):
         return render(req, 'index.html', {'all_items': all_items ,'chart_url': '/pie-chart/', 'curr_username' : username,  'form' : form , 'user' : user, 'word' : word } )
 
 def update(request, item_id):
-    item = get_object_or_404(Item, id=item_id)  # Fetch the item
+    item = get_object_or_404(Item, id=item_id)  
 
     if request.method == "POST":
         form = UpdateListForm(request.POST, request.FILES, instance=item)
@@ -153,14 +159,18 @@ def department(req, dept):
 def profile(request, username):
 
 
-    user_items = Item.objects.filter(sUsername__iexact=username)
-
+    user_items = Item.objects.filter(sUsername__iexact=username)    
+    
     
     try:
         userR = get_object_or_404(User, username=username)
         user_mem = get_object_or_404(Member, user=userR)
     except:
         userR=None
+
+    
+
+
 
     curr_member = get_object_or_404(Member, user=request.user)
     if request.user.is_authenticated and userR != None:
@@ -173,6 +183,7 @@ def profile(request, username):
         'user': request.user,
         'prof_user' : userR,
         'profile' : user_mem,
+
         
     })
 
@@ -187,7 +198,97 @@ def profile(request, username):
     })
 
 
+def prof_attend(req, username):
+    try:
 
+        roll = User.objects.filter(username = username).first()
+        roll_mem = Member.objects.filter(user=roll).first()
+        fin_roll = roll_mem.roll_no
+        print(fin_roll)
+        student = Attend.objects.get(roll_no = fin_roll)
+        total_stud = int(student.math or 0) + int(student.coa or 0) + int(student.cn or 0) + int(student.at or 0) + int(student.os or 0)
+
+        total = Attend.objects.get(roll_no = 71)
+        total_all = int(total.math or 0) + int(total.coa or 0) + int(total.cn or 0) + int(total.at or 0) + int(total.os or 0)
+        
+        print(total_all)
+        print(total_stud)
+
+        calc = int(total_stud) / int(total_all) * 100
+        print(calc)
+
+        percents = {
+                'math': (int(student.math or 0) / int(total.math or 1)) * 100 if int(total.math or 0) != 0 else 0,
+                'coa': (int(student.coa or 0) / int(total.coa or 1)) * 100 if int(total.coa or 0) != 0 else 0,
+                'cn': (int(student.cn or 0) / int(total.cn or 1)) * 100 if int(total.cn or 0) != 0 else 0,
+                'at': (int(student.at or 0) / int(total.at or 1)) * 100 if int(total.at or 0) != 0 else 0,
+                'os': (int(student.os or 0) / int(total.os or 1)) * 100 if int(total.os or 0) != 0 else 0,
+            }
+        
+        stud_sub = {
+                'math': int(student.math or 0) ,
+                'coa': int(student.coa or 0) ,
+                'cn': int(student.cn or 0) ,
+                'at': int(student.at or 0) ,
+                'os': int(student.os or 0),
+            }
+        
+        total_sub = {
+                'math': int(total.math or 0) ,
+                'coa': int(total.coa or 0) ,
+                'cn': int(total.cn or 0) ,
+                'at': int(total.at or 0) ,
+                'os': int(total.os or 0),
+            }
+        hmm = 1
+        
+
+    except:
+        hmm = 0
+
+    subjects = list(percents.keys())  # X-axis labels (subjects)
+    attendance = list(percents.values())  # Y-axis values (% attendance)
+
+    # Create the bar graph
+
+    plt.figure(figsize=(8, 5))
+    plt.bar(subjects, attendance, color=["blue", "red", "green", "orange", "purple"])
+
+    plt.xlabel("Subjects")
+    plt.ylabel("Attendance (%)")
+    plt.title("Attendance Percentage Per Subject")
+    plt.ylim(0, 100)  # Ensure the Y-axis is from 0% to 100%
+    plt.grid(axis="y", linestyle="--", alpha=0.7)
+
+    # Convert plot to image for rendering in the template
+    buffer = io.BytesIO()
+    plt.savefig(buffer, format="png")
+    buffer.seek(0)
+    image_base64 = base64.b64encode(buffer.getvalue()).decode()
+    buffer.close()
+
+    if req.user.is_authenticated and  hmm != 0:
+        
+
+        return render(req, 'profile_attend.html', {
+        'username': username,
+        'total' : total_stud,
+        'total_all' : total_all,
+        'calc' : calc,
+
+        'percent' : percents,
+        'stud_sub' : stud_sub,
+        'total_sub' : total_sub,
+
+        'chart' : image_base64,
+        
+    })
+
+    else:
+        return render(req, 'profile_attend.html', {
+        'username': username,
+        
+    })
     
 def category_item(req, dept, category):
     category_items = Item.objects.filter(category__iexact=category, department__iexact=dept)
@@ -277,7 +378,7 @@ from datetime import datetime
 from collections import defaultdict
 
 def attend_view(req):
-    genai.configure(api_key="AIzaSyBi-lF7PEra0qfk-1CKxaLnoEEZGqICY1k")
+    genai.configure(api_key="AIzaSyASt8Y88sJt1TP2gOq_MzW5AzokHQ7Nu_w")
     model = genai.GenerativeModel(model_name="gemini-1.5-pro")
 
     form = AttendForm()
@@ -288,6 +389,8 @@ def attend_view(req):
         roll_image = req.FILES.get('attend_file')
         roll_date = req.POST.get('roll_date')
         time_slot = req.POST.get('time_slot') 
+        subject = req.POST.get('subject')
+        math = workbook.worksheet(f"{subject}")
 
         if roll_image:
             upload_result = cloudinary.uploader.upload(roll_image)
@@ -317,10 +420,24 @@ def attend_view(req):
                 for num in extracted_numbers:
                     actual_list[num - 1] = 'A' 
 
+            
             except (SyntaxError, ValueError) as e:
                 print("Error parsing response:", e)
                 return render(req, 'attend.html', {'form': form, 'error': 'Error processing image data'})
 
+            var = subject
+            print(extracted_numbers)
+            for i in range(1,72):
+                if i not in extracted_numbers:
+                    filt = Attend.objects.filter(roll_no = i).first()
+                    fin = int(getattr(filt, var))  # Get the value
+                    fin += 1  # Increment
+                    setattr(filt, var, fin)
+                    
+                    filt.save()
+                else:
+                    pass
+            
 
             formatted_time = datetime.strptime(time_slot, "%H:%M").strftime("%I:%M %p")
 
@@ -328,7 +445,7 @@ def attend_view(req):
 
             date_column = None
             
-
+           
             date_column = len(data[0]) + 1
             math.update_cell(1, date_column, roll_date)
             

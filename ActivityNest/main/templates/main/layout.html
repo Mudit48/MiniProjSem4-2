@@ -193,6 +193,12 @@
                     View Spreadsheet
                   </a>
                   {% endif %}
+                  {% if user.is_authenticated and member.roles == 'Teacher' %}
+                  <a href="{%url 'attend'%}" class="rounded-md bg-[#0A233A] px-4 py-3 text-lg font-semibold text-white 
+                  hover:bg-[#123456] transition font-sans" >
+                    Set Attendance
+                  </a>
+                  {% endif %}
                   
                   <div id="events-dropdown" class="hidden z-50 absolute left-1/4  mt-9   -translate-x-1/8 px-4 ">
                     <div class="w-64 max-w-md flex-auto overflow-hidden rounded-3xl bg-[#E0F7FA] text-sm/6 ring-1 shadow-lg ring-gray-900/5">
@@ -372,6 +378,9 @@
       
       
       
+      {%block userSearch%}
+      {%endblock%}
+      
     <main class="flex bg-[#A8DADC]">
         
       {%block chart%}
@@ -476,6 +485,9 @@
 
       {%block profile%}
 
+      {%endblock%}
+
+      {%block profile_attend%}
       {%endblock%}
 
       

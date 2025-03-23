@@ -6,6 +6,9 @@ from .models import Member
 from .forms import MemberForm, LoginForm
 import cloudinary.uploader
 
+
+
+
 def register(req):
     if req.method == "POST":
         form = MemberForm(req.POST,req.FILES)
@@ -15,6 +18,7 @@ def register(req):
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
             department = form.cleaned_data['department']
+            roll_no = form.cleaned_data['roll_no']
             profile_picture = req.FILES.get('profile_picture')
 
             if User.objects.filter(username=username).exists():
@@ -28,7 +32,7 @@ def register(req):
                 upload_result = cloudinary.uploader.upload(profile_picture)
                 profile_picture_url = upload_result.get('secure_url')
 
-            member = Member.objects.create(user=user, full_name = full_name,department=department, profile_picture=profile_picture_url)
+            member = Member.objects.create(user=user,roll_no=roll_no, full_name = full_name,department=department, profile_picture=profile_picture_url)
 
             messages.success(req, 'Registration successful! You can now log in.')
             return redirect('login')

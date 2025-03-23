@@ -8,6 +8,16 @@
     Welcome to Activity Nest!
 {% endblock %}
 
+{%block userSearch%}
+<div class="text-right">
+    <form id="searchForm" method="POST" onsubmit="this.action='/user/' + encodeURIComponent(document.getElementById('id_username').value.trim()) + '/'">
+      {% csrf_token %} 
+      <label for="id_username">Enter Username:</label>
+      <input type="text" id="id_username" required>  
+      <button type="submit">Submit</button>
+    </form>
+</div>
+{%endblock%}
 
 {%block chart%}
 <div class="h-120 mt-2 text-center pl-3 shadow-lg">

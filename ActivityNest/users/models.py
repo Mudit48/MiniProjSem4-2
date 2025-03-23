@@ -21,6 +21,7 @@ class RoleChoices(models.TextChoices):
 
 class Member(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
+    roll_no = models.IntegerField(max_length=3, null=True)
     full_name = models.CharField(max_length=255,  null=True)    
     department = models.CharField(max_length=10, default="EXTC", choices=dept_choice)
     year = models.CharField(max_length=10, null=True, default="SE", choices=year_choice)

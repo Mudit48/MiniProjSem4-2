@@ -33,7 +33,14 @@ class Item(models.Model):
 
 class Attend(models.Model):
     roll_no = models.IntegerField(max_length=2, null=False)
-    name = models.CharField(max_length=100, null=False)
-    mark = models.CharField(max_length=1, null=False, default="P")
-    roll_image = models.URLField(null=False)
-    roll_date = models.DateField(null=False)
+    name = models.CharField(max_length=100,default=0, null=False)
+    math = models.CharField(max_length=3,default=0, null=True)
+    at = models.CharField(max_length=3,default=0, null=True)
+    cn = models.CharField(max_length=3,default=0, null=True)
+    coa = models.CharField(max_length=3,default=0, null=True)
+    os = models.CharField(max_length=3,default=0, null=True)
+    python = models.CharField(max_length=3,default=0, null=True)
+
+
+    roll_image = models.URLField(null=True)
+    roll_date = models.DateField(null=True)
