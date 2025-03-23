@@ -32,7 +32,7 @@ class MemberForm(forms.ModelForm):
 
     class Meta:
         model = Member
-        fields = ['department'] 
+        fields = ['full_name', 'department'] 
 
 
 class LoginForm(forms.Form):  # Use Form instead of ModelForm

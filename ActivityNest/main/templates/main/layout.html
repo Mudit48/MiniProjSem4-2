@@ -501,12 +501,15 @@
                 </p>
                 <div class="mt-4">
                     <div class="">
-                        <p class="text-md font-medium text-gray-900">{{item.name}}</p>
+                    
                         <p class="text-md text-gray-500">{{item.category}}</p>
                     </div>
                 </div>
                 <div class="mt-4 text-sm flex justify-between items-center">
+                  <div class="">
                     <div class="text-gray-600"> {{item.date_posted}}</div>
+                    <div class="text-gray-600"> @{{item.teacher}}</div>
+                  </div>
                         <div class="text-white text-right">
                           {% if member.roles == "Teacher" and member.department == item.department %}
                               <a href="{% url 'delete' item.id %}" data-item-username="{{ item.sUsername }}" data-item-id="{{ item.id }}" data-item-year="{{item.year}}" data-item-name="{{ item.name }}" 

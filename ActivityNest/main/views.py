@@ -15,6 +15,8 @@ import google.generativeai as genai
 import httpx
 import base64
 import ast
+from django.contrib.auth.models import User
+
 
 
 scopes = [
@@ -148,7 +150,6 @@ def department(req, dept):
     else:
         return render(req, '404.html')
     
-from django.contrib.auth.models import User
 def profile(request, username):
 
 
@@ -215,6 +216,9 @@ def category(req, category):
 def list_item(req):
     form = ListForm()
     department = req.user.member.department
+    teacher = req.user.member.full_name
+    print(teacher)
+    
 
     if req.method == 'POST':
         form = ListForm(req.POST, req.FILES, user=req.user)
@@ -252,6 +256,7 @@ def list_item(req):
 
             item.files = uploaded_urls
             item.department = department
+            item.teacher = teacher
             item.save()
             item.refresh_from_db()
             id = item.id

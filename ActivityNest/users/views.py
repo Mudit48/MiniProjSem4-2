@@ -28,7 +28,7 @@ def register(req):
                 upload_result = cloudinary.uploader.upload(profile_picture)
                 profile_picture_url = upload_result.get('secure_url')
 
-            member = Member.objects.create(user=user, department=department, profile_picture=profile_picture_url)
+            member = Member.objects.create(user=user, full_name = full_name,department=department, profile_picture=profile_picture_url)
 
             messages.success(req, 'Registration successful! You can now log in.')
             return redirect('login')
