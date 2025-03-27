@@ -1,7 +1,7 @@
 {%extends 'layout.html'%}
 
 {%block data%}
-    <div class="bg-[#A8DADC] min-h-screen flex items-center justify-center p-6">
+    <div class="bg-[#A8DADC] min-h-screen mx-auto flex items-center justify-center p-6">
         {% if messages %}
       <div id="toast-container" class="fixed top-5 z-50 space-y-4">
       {% for message in messages %}
@@ -55,13 +55,12 @@
                     
                     <input type="file" name="files" multiple class="mt-4">
                 </div>
-
-                <!-- Right: Submit Button -->
-                <div class="bg-gray-100 p-6 rounded-xl shadow-sm flex flex-col justify-center items-center">
-                    <button type="submit" class="min-w-[120px] bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-6 rounded-lg transition-transform duration-300 hover:scale-105">
-                        Submit
-                    </button>
-                </div>
+  
+            </div>
+            <div class=" p-6 rounded-xl shadow-sm flex flex-col justify-center  items-center">
+                <button type="submit" class="min-w-[120px] bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-6 rounded-lg transition-transform duration-300 hover:scale-105">
+                    Submit
+                </button>
             </div>
         </form>
     </div>

@@ -6,18 +6,7 @@ attendance of {{ username }}
 
 {% block profile %}
 
-    <div class="mt-2 ml-2 w-1/2 h-full bg-white p-6 rounded-lg relative shadow-lg flex flex-col">
-        <div class="flex justify-center">
-            <img class="h-40 rounded-full" src="{{profile.profile_picture}}" alt="">
-        </div>
-        <div class="mt-10 p-4">
-            <h2 id="prof_name" class="text-xl font-semibold text-gray-900"></h2>
-            <label class="text-sm text-black">Username: </label> <input readonly value="@{{ username }}">
-            <p class="text-sm text-gray-600">{{ profile.full_name }}</p>
-            <p class="text-sm text-gray-600">{{ profile.department }}</p>
-            <p class="text-sm text-gray-600">{{ profile.year}}</p>
-        </div>
-        
+    <div class="mt-2 ml-2 w-1/2 h-full bg-white p-6 rounded-lg relative shadow-lg flex flex-col">      
         <div>
             <img src="data:image/png;base64,{{ chart }}">
         </div>
@@ -33,8 +22,8 @@ attendance of {{ username }}
 
 {% block profile_attend%}
 
-<div class="max-w-6xl mt-2 mx-2  w-full mb-10">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 ">
+<div class="max-w-6xl mt-2 mx-2  w-full mb-10 flex gap-4 ">
+    <div class="container w-50">
 
         <div class="bg-gray-100 p-6 rounded-xl relative shadow-lg flex flex-col border border-gray-300 transition-transform hover:scale-[1.02]">
                 <h2 class="text-center"> Math </h2>
@@ -42,18 +31,40 @@ attendance of {{ username }}
                 </p>
                 <div class="mt-4">
                     <div class="">
-                        <p class="text-md text-gray-500">{{item.category}}</p>
-                        <p class="text-md text-gray-500">{{item.category}}</p>
+                        <p class="text-md text-gray-500">Total Percent: {{percent.math}} %</p>
+                        <p class="text-md text-gray-500">Present: {{stud_sub.math}} </p>
+                        <p class="text-md text-gray-500">Absent: {{total_sub.math}} </p>
                     </div>
                 </div>
-                <div class="mt-4 text-sm flex justify-between items-center">
-                  <div class="">
-                    <div class="text-gray-600"> {{item.date_posted}}</div>
-                    <div class="text-gray-600"> {{item.teacher}}</div>
-                  </div>
-                        <div class="text-white text-right">
-                              
-                        </div>
+        </div>
+    </div>
+    <div class="container min-w-52">
+
+        <div class="bg-gray-100 p-6 rounded-xl relative shadow-lg flex flex-col border border-gray-300 transition-transform hover:scale-[1.02]">
+                <h2 class="text-center"> Computer Organization and Architecture </h2>
+                <p class="mt-2 text-gray-700 flex-grow leading-relaxed text-lg">
+                </p>
+                <div class="mt-4">
+                    <div class="">
+                        <p class="text-md text-gray-500">Total Percent: {{percent.coa}} %</p>
+                        <p class="text-md text-gray-500">Present: {{stud_sub.coa}} </p>
+                        <p class="text-md text-gray-500">Absent: {{total_sub.coa}} </p>
+                    </div>
+                </div>
+        </div>
+    </div>
+    <div class="container ">
+
+        <div class="bg-gray-100 p-6 rounded-xl relative shadow-lg flex flex-col border border-gray-300 transition-transform hover:scale-[1.02]">
+                <h2 class="text-center"> Computer Networking </h2>
+                <p class="mt-2 text-gray-700 flex-grow leading-relaxed text-lg">
+                </p>
+                <div class="mt-4">
+                    <div class="">
+                        <p class="text-md text-gray-500">Total Percent: {{percent.cn}} %</p>
+                        <p class="text-md text-gray-500">Present: {{stud_sub.cn}} </p>
+                        <p class="text-md text-gray-500">Absent: {{total_sub.cn}} </p>
+                    </div>
                 </div>
         </div>
     </div>

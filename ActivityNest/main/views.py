@@ -218,11 +218,11 @@ def prof_attend(req, username):
         print(calc)
 
         percents = {
-                'math': (int(student.math or 0) / int(total.math or 1)) * 100 if int(total.math or 0) != 0 else 0,
-                'coa': (int(student.coa or 0) / int(total.coa or 1)) * 100 if int(total.coa or 0) != 0 else 0,
-                'cn': (int(student.cn or 0) / int(total.cn or 1)) * 100 if int(total.cn or 0) != 0 else 0,
-                'at': (int(student.at or 0) / int(total.at or 1)) * 100 if int(total.at or 0) != 0 else 0,
-                'os': (int(student.os or 0) / int(total.os or 1)) * 100 if int(total.os or 0) != 0 else 0,
+                'math': round((int(student.math or 0) / int(total.math or 1)) * 100 if int(total.math or 0) != 0 else 0, 3),
+                'coa': round((int(student.coa or 0) / int(total.coa or 1)) * 100 if int(total.coa or 0) != 0 else 0, 3),
+                'cn': round((int(student.cn or 0) / int(total.cn or 1)) * 100 if int(total.cn or 0) != 0 else 0,3),
+                'at': round((int(student.at or 0) / int(total.at or 1)) * 100 if int(total.at or 0) != 0 else 0,3),
+                'os': round((int(student.os or 0) / int(total.os or 1)) * 100 if int(total.os or 0) != 0 else 0,3),
             }
         
         stud_sub = {
@@ -252,12 +252,12 @@ def prof_attend(req, username):
     # Create the bar graph
 
     plt.figure(figsize=(8, 5))
-    plt.bar(subjects, attendance, color=["blue", "red", "green", "orange", "purple"])
+    plt.bar(subjects, attendance, color=["#e76f51", "#2A9D8F", "#E9C46A", "#F4A261", "#d62828"])
 
     plt.xlabel("Subjects")
     plt.ylabel("Attendance (%)")
     plt.title("Attendance Percentage Per Subject")
-    plt.ylim(0, 100)  # Ensure the Y-axis is from 0% to 100%
+    plt.ylim(0, 100)  
     plt.grid(axis="y", linestyle="--", alpha=0.7)
 
     # Convert plot to image for rendering in the template
@@ -267,10 +267,7 @@ def prof_attend(req, username):
     image_base64 = base64.b64encode(buffer.getvalue()).decode()
     buffer.close()
 
-    if req.user.is_authenticated and  hmm != 0:
-        
-
-        return render(req, 'profile_attend.html', {
+    context = {
         'username': username,
         'total' : total_stud,
         'total_all' : total_all,
@@ -281,8 +278,11 @@ def prof_attend(req, username):
         'total_sub' : total_sub,
 
         'chart' : image_base64,
-        
-    })
+    }
+
+    if req.user.is_authenticated and  hmm != 0:
+
+        return render(req, 'profile_attend.html', context)
 
     else:
         return render(req, 'profile_attend.html', {

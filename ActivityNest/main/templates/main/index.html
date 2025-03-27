@@ -9,7 +9,7 @@
 {% endblock %}
 
 {%block userSearch%}
-<div class="text-right">
+<div class="text-right mt-3 ">
     <form id="searchForm" method="POST" onsubmit="this.action='/user/' + encodeURIComponent(document.getElementById('id_username').value.trim()) + '/'">
       {% csrf_token %} 
       <label for="id_username">Enter Username:</label>
